@@ -65,10 +65,10 @@ server.express.get(
     const url = process.env.HEROKU_URL + "/callback";
     if (flag) {
       // res.redirect("http://localhost:3000/callback/login?email=" + data.email);
-      res.redirect(url + "/login?email=" + DataCue.email);
+      res.redirect(url + "/login?email=" + data.email);
     } else {
       // res.redirect("http://localhost:3000/callback/join?email=" + data.email);
-      res.redirect(url + "/join?email=" + DataCue.email);
+      res.redirect(url + "/join?email=" + data.email);
     }
   }
 );
