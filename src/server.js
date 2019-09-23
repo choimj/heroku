@@ -61,6 +61,7 @@ server.express.get(
     /**
      * google API로 인증받은 후 front-end 로 controll 넘겨서 처리
      */
+    const { flag, data } = req.user;
     const url = process.env.HEROKU_URL + "/callback";
     if (flag) {
       // res.redirect("http://localhost:3000/callback/login?email=" + data.email);
