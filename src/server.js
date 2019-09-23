@@ -61,13 +61,13 @@ server.express.get(
     /**
      * google API로 인증받은 후 front-end 로 controll 넘겨서 처리
      */
-    const url = process.env.HEROKU_URL + "/callback/login?email=" + data.email;
+    const url = process.env.HEROKU_URL + "/callback";
     if (flag) {
       // res.redirect("http://localhost:3000/callback/login?email=" + data.email);
-      res.redirect(url);
+      res.redirect(url + "/login?email=" + DataCue.email);
     } else {
       // res.redirect("http://localhost:3000/callback/join?email=" + data.email);
-      res.redirect(url);
+      res.redirect(url + "/join?email=" + DataCue.email);
     }
   }
 );
