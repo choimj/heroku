@@ -61,19 +61,19 @@ server.express.get(
     /**
      * google API로 인증받은 후 front-end 로 controll 넘겨서 처리
      */
-    const { flag, data } = req.user;
-    // console.log(req.user);
-    if (flag) {
-      // res.redirect("http://localhost:3000/callback/login?email=" + data.email);
-      res.redirect(
-        "https://rbsdemo.netlify.com/callback/login?email=" + data.email
-      );
-    } else {
-      // res.redirect("http://localhost:3000/callback/join?email=" + data.email);
-      res.redirect(
-        "https://rbsdemo.netlify.com/callback/login?email=" + data.email
-      );
-    }
+    // const { flag, data } = req.user;
+    // // console.log(req.user);
+    // if (flag) {
+    //   // res.redirect("http://localhost:3000/callback/login?email=" + data.email);
+    //   res.redirect(
+    //     "https://rbsdemo.netlify.com/callback/login?email=" + data.email
+    //   );
+    // } else {
+    //   // res.redirect("http://localhost:3000/callback/join?email=" + data.email);
+    //   res.redirect(
+    //     "https://rbsdemo.netlify.com/callback/login?email=" + data.email
+    //   );
+    // }
   }
 );
 
