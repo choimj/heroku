@@ -1,0 +1,32 @@
+type User {
+  id: ID!
+  email: String!
+  name: String!
+  password: String!
+  groupParticipants: [GroupParticipant!]
+}
+
+type Session {
+  id: ID!
+  email: String!
+  token: String!
+}
+
+type ReturnUserObj {
+  id: ID
+  email: String
+  name: String
+  message: String
+  flag: Boolean
+}
+
+type Query {
+  users: [User]!
+  user(id: ID, email: String!): User
+}
+
+type Mutation {
+  createUser(email: String!, name: String!, password: String!): String
+  comparePassword(email: String!, password: String!): ReturnUserObj
+  deleteSession(email: String!, token: String!): Session
+}

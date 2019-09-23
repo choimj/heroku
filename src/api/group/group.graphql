@@ -1,0 +1,45 @@
+type Group {
+  id: ID
+  name: String
+  groupParticipants: [GroupParticipant!]
+}
+
+type GroupParticipant {
+  id: ID!
+  groupId: Group
+  userId: User
+  name: String!
+}
+
+input GroupCreateInput {
+  id: ID
+  name: String!
+  # groupParticipants: [GroupParticipantCreateInput!]
+}
+
+input GroupUpdateInput {
+  id: ID!
+  name: String!
+  groupParticipants: [GroupParticipantCreateInput!]
+}
+input GroupWhereUniqueInput {
+  id: ID
+}
+input GroupParticipantCreateInput {
+  id: ID
+  groupId: String
+  userId: String
+  name: String!
+}
+
+type Query {
+  groups: [Group]!
+  group(id: ID): Group
+}
+
+type Mutation {
+  createGroup(data: GroupCreateInput!): Group!
+  createGroupParticipant(data: GroupParticipantCreateInput!): GroupParticipant!
+  updateGroup(data: GroupUpdateInput!): Group
+  deleteGroup(data: GroupWhereUniqueInput!): Group
+}
