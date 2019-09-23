@@ -64,23 +64,20 @@ server.express.get(
     const { flag, data } = req.user;
     const url = process.env.HEROKU_URL + "/callback";
     if (flag) {
-      // res.redirect("http://localhost:3000/callback/login?email=" + data.email);
       res.redirect(url + "/login?email=" + data.email);
     } else {
-      // res.redirect("http://localhost:3000/callback/join?email=" + data.email);
       res.redirect(url + "/join?email=" + data.email);
     }
   }
 );
 
 server.express.post("/auth/jwt", async (req, res) => {
-  // console.log("req body", req.body);
   const { email } = req.body;
   const opts = {
     expiresIn: "60m"
   };
   const token = jwt.sign({ email }, jwtSecret, opts);
-
+  // console.log(token);
   return res.status(200).json({
     flag: true,
     jwtToken: token

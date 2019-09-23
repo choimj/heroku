@@ -14,7 +14,7 @@ export default new GoogleStrategy.OAuth2Strategy(
 
     const user = await prisma.user({ email: email });
     let returnArr = {};
-    // console.log("user====================");
+    console.log("user====================");
 
     if (user === null) {
       // 회원이 아닌 경우 회원가입 페이지로 redirect
@@ -27,7 +27,7 @@ export default new GoogleStrategy.OAuth2Strategy(
       };
     } else {
       // 회원인 경우 로그인 후 main 페이지로 redirect
-      // console.log("member!!");
+      console.log("member!!");
       returnArr = {
         flag: true,
         data: user
