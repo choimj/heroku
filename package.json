@@ -31,6 +31,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/server.js"
   },
+  "engines": {
+    "node": "^10.16.0",
+    "npm": "^6.9.0"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/choimj/heroku-rbs-backend.git"
