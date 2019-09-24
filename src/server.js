@@ -23,15 +23,15 @@ server.express.use(bodyParser.json());
 server.express.use(passport.initialize()); // passport 구동
 server.express.use(passport.session()); // 세션 연결
 
-// let allowCrossDomain = (req, res, next) => {
-//   /**
-//    * :3000, :4000 으로 crossBrowsing 이슈 때문에 구현
-//    */
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header("Access-Control-Allow-Headers", "*");
-//   next();
-// };
-// server.express.use(allowCrossDomain);
+let allowCrossDomain = (req, res, next) => {
+  /**
+   * :3000, :4000 으로 crossBrowsing 이슈 때문에 구현
+   */
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "*");
+  next();
+};
+server.express.use(allowCrossDomain);
 
 passport.serializeUser((user, done) => {
   // Strategy 성공 시 호출됨
