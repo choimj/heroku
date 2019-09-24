@@ -25,3 +25,16 @@ type GroupParticipant {
   name: String!
 }
 
+type Category {
+  id: ID! @id
+  name: String!
+  categoryParticipants: [CategoryParticipant] @relation(onDelete: CASCADE)
+}
+
+type CategoryParticipant {
+  id: ID! @id
+  categoryId: Category 
+  userId: User 
+  name: String!
+}
+

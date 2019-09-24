@@ -1,0 +1,26 @@
+type Category {
+  id: ID!
+  name: String!
+  categoryParticipants: [CategoryParticipant]
+}
+
+type CategoryParticipant {
+  id: ID!
+  categoryId: Category
+  userId: User
+  name: String!
+}
+
+input CategoryCreateInput {
+  id: ID
+  name: String!
+}
+
+type Query {
+  categories: [Category]!
+  category(id: ID!): Category
+}
+
+type Mutation {
+  createCategory(data: CategoryCreateInput!): Category!
+}

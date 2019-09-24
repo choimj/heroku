@@ -77,7 +77,6 @@ server.express.post("/auth/jwt", async (req, res) => {
     expiresIn: "60m"
   };
   const token = jwt.sign({ email }, jwtSecret, opts);
-  // console.log(token);
   return res.status(200).json({
     flag: true,
     jwtToken: token

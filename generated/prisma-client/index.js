@@ -19,6 +19,14 @@ var models = [
   {
     name: "GroupParticipant",
     embedded: false
+  },
+  {
+    name: "Category",
+    embedded: false
+  },
+  {
+    name: "CategoryParticipant",
+    embedded: false
   }
 ];
 exports.Prisma = prisma_lib_1.makePrismaClientClass({

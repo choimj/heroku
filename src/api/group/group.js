@@ -7,9 +7,9 @@ const resolvers = {
     groups: async () => await prisma.groups(),
     group: async (_, args) => {
       const { id } = args;
-      let groups = await prisma.group({ id: id });
+      let group = await prisma.group({ id: id });
 
-      return groups;
+      return group;
     }
   },
   Mutation: {

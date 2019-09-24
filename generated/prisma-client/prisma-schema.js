@@ -3,7 +3,15 @@ module.exports = {
   // Please don't change this file manually but run `prisma generate` to update it.
   // For more information, please read the docs: https://www.prisma.io/docs/prisma-client/
 
-/* GraphQL */ `type AggregateGroup {
+/* GraphQL */ `type AggregateCategory {
+  count: Int!
+}
+
+type AggregateCategoryParticipant {
+  count: Int!
+}
+
+type AggregateGroup {
   count: Int!
 }
 
@@ -21,6 +29,324 @@ type AggregateUser {
 
 type BatchPayload {
   count: Long!
+}
+
+type Category {
+  id: ID!
+  name: String!
+  categoryParticipants(where: CategoryParticipantWhereInput, orderBy: CategoryParticipantOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CategoryParticipant!]
+}
+
+type CategoryConnection {
+  pageInfo: PageInfo!
+  edges: [CategoryEdge]!
+  aggregate: AggregateCategory!
+}
+
+input CategoryCreateInput {
+  id: ID
+  name: String!
+  categoryParticipants: CategoryParticipantCreateManyWithoutCategoryIdInput
+}
+
+input CategoryCreateOneWithoutCategoryParticipantsInput {
+  create: CategoryCreateWithoutCategoryParticipantsInput
+  connect: CategoryWhereUniqueInput
+}
+
+input CategoryCreateWithoutCategoryParticipantsInput {
+  id: ID
+  name: String!
+}
+
+type CategoryEdge {
+  node: Category!
+  cursor: String!
+}
+
+enum CategoryOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+}
+
+type CategoryParticipant {
+  id: ID!
+  categoryId: Category
+  userId: User
+  name: String!
+}
+
+type CategoryParticipantConnection {
+  pageInfo: PageInfo!
+  edges: [CategoryParticipantEdge]!
+  aggregate: AggregateCategoryParticipant!
+}
+
+input CategoryParticipantCreateInput {
+  id: ID
+  categoryId: CategoryCreateOneWithoutCategoryParticipantsInput
+  userId: UserCreateOneInput
+  name: String!
+}
+
+input CategoryParticipantCreateManyWithoutCategoryIdInput {
+  create: [CategoryParticipantCreateWithoutCategoryIdInput!]
+  connect: [CategoryParticipantWhereUniqueInput!]
+}
+
+input CategoryParticipantCreateWithoutCategoryIdInput {
+  id: ID
+  userId: UserCreateOneInput
+  name: String!
+}
+
+type CategoryParticipantEdge {
+  node: CategoryParticipant!
+  cursor: String!
+}
+
+enum CategoryParticipantOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+}
+
+type CategoryParticipantPreviousValues {
+  id: ID!
+  name: String!
+}
+
+input CategoryParticipantScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  AND: [CategoryParticipantScalarWhereInput!]
+  OR: [CategoryParticipantScalarWhereInput!]
+  NOT: [CategoryParticipantScalarWhereInput!]
+}
+
+type CategoryParticipantSubscriptionPayload {
+  mutation: MutationType!
+  node: CategoryParticipant
+  updatedFields: [String!]
+  previousValues: CategoryParticipantPreviousValues
+}
+
+input CategoryParticipantSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: CategoryParticipantWhereInput
+  AND: [CategoryParticipantSubscriptionWhereInput!]
+  OR: [CategoryParticipantSubscriptionWhereInput!]
+  NOT: [CategoryParticipantSubscriptionWhereInput!]
+}
+
+input CategoryParticipantUpdateInput {
+  categoryId: CategoryUpdateOneWithoutCategoryParticipantsInput
+  userId: UserUpdateOneInput
+  name: String
+}
+
+input CategoryParticipantUpdateManyDataInput {
+  name: String
+}
+
+input CategoryParticipantUpdateManyMutationInput {
+  name: String
+}
+
+input CategoryParticipantUpdateManyWithoutCategoryIdInput {
+  create: [CategoryParticipantCreateWithoutCategoryIdInput!]
+  delete: [CategoryParticipantWhereUniqueInput!]
+  connect: [CategoryParticipantWhereUniqueInput!]
+  set: [CategoryParticipantWhereUniqueInput!]
+  disconnect: [CategoryParticipantWhereUniqueInput!]
+  update: [CategoryParticipantUpdateWithWhereUniqueWithoutCategoryIdInput!]
+  upsert: [CategoryParticipantUpsertWithWhereUniqueWithoutCategoryIdInput!]
+  deleteMany: [CategoryParticipantScalarWhereInput!]
+  updateMany: [CategoryParticipantUpdateManyWithWhereNestedInput!]
+}
+
+input CategoryParticipantUpdateManyWithWhereNestedInput {
+  where: CategoryParticipantScalarWhereInput!
+  data: CategoryParticipantUpdateManyDataInput!
+}
+
+input CategoryParticipantUpdateWithoutCategoryIdDataInput {
+  userId: UserUpdateOneInput
+  name: String
+}
+
+input CategoryParticipantUpdateWithWhereUniqueWithoutCategoryIdInput {
+  where: CategoryParticipantWhereUniqueInput!
+  data: CategoryParticipantUpdateWithoutCategoryIdDataInput!
+}
+
+input CategoryParticipantUpsertWithWhereUniqueWithoutCategoryIdInput {
+  where: CategoryParticipantWhereUniqueInput!
+  update: CategoryParticipantUpdateWithoutCategoryIdDataInput!
+  create: CategoryParticipantCreateWithoutCategoryIdInput!
+}
+
+input CategoryParticipantWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  categoryId: CategoryWhereInput
+  userId: UserWhereInput
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  AND: [CategoryParticipantWhereInput!]
+  OR: [CategoryParticipantWhereInput!]
+  NOT: [CategoryParticipantWhereInput!]
+}
+
+input CategoryParticipantWhereUniqueInput {
+  id: ID
+}
+
+type CategoryPreviousValues {
+  id: ID!
+  name: String!
+}
+
+type CategorySubscriptionPayload {
+  mutation: MutationType!
+  node: Category
+  updatedFields: [String!]
+  previousValues: CategoryPreviousValues
+}
+
+input CategorySubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: CategoryWhereInput
+  AND: [CategorySubscriptionWhereInput!]
+  OR: [CategorySubscriptionWhereInput!]
+  NOT: [CategorySubscriptionWhereInput!]
+}
+
+input CategoryUpdateInput {
+  name: String
+  categoryParticipants: CategoryParticipantUpdateManyWithoutCategoryIdInput
+}
+
+input CategoryUpdateManyMutationInput {
+  name: String
+}
+
+input CategoryUpdateOneWithoutCategoryParticipantsInput {
+  create: CategoryCreateWithoutCategoryParticipantsInput
+  update: CategoryUpdateWithoutCategoryParticipantsDataInput
+  upsert: CategoryUpsertWithoutCategoryParticipantsInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: CategoryWhereUniqueInput
+}
+
+input CategoryUpdateWithoutCategoryParticipantsDataInput {
+  name: String
+}
+
+input CategoryUpsertWithoutCategoryParticipantsInput {
+  update: CategoryUpdateWithoutCategoryParticipantsDataInput!
+  create: CategoryCreateWithoutCategoryParticipantsInput!
+}
+
+input CategoryWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  categoryParticipants_every: CategoryParticipantWhereInput
+  categoryParticipants_some: CategoryParticipantWhereInput
+  categoryParticipants_none: CategoryParticipantWhereInput
+  AND: [CategoryWhereInput!]
+  OR: [CategoryWhereInput!]
+  NOT: [CategoryWhereInput!]
+}
+
+input CategoryWhereUniqueInput {
+  id: ID
 }
 
 type Group {
@@ -383,6 +709,18 @@ input GroupWhereUniqueInput {
 scalar Long
 
 type Mutation {
+  createCategory(data: CategoryCreateInput!): Category!
+  updateCategory(data: CategoryUpdateInput!, where: CategoryWhereUniqueInput!): Category
+  updateManyCategories(data: CategoryUpdateManyMutationInput!, where: CategoryWhereInput): BatchPayload!
+  upsertCategory(where: CategoryWhereUniqueInput!, create: CategoryCreateInput!, update: CategoryUpdateInput!): Category!
+  deleteCategory(where: CategoryWhereUniqueInput!): Category
+  deleteManyCategories(where: CategoryWhereInput): BatchPayload!
+  createCategoryParticipant(data: CategoryParticipantCreateInput!): CategoryParticipant!
+  updateCategoryParticipant(data: CategoryParticipantUpdateInput!, where: CategoryParticipantWhereUniqueInput!): CategoryParticipant
+  updateManyCategoryParticipants(data: CategoryParticipantUpdateManyMutationInput!, where: CategoryParticipantWhereInput): BatchPayload!
+  upsertCategoryParticipant(where: CategoryParticipantWhereUniqueInput!, create: CategoryParticipantCreateInput!, update: CategoryParticipantUpdateInput!): CategoryParticipant!
+  deleteCategoryParticipant(where: CategoryParticipantWhereUniqueInput!): CategoryParticipant
+  deleteManyCategoryParticipants(where: CategoryParticipantWhereInput): BatchPayload!
   createGroup(data: GroupCreateInput!): Group!
   updateGroup(data: GroupUpdateInput!, where: GroupWhereUniqueInput!): Group
   updateManyGroups(data: GroupUpdateManyMutationInput!, where: GroupWhereInput): BatchPayload!
@@ -427,6 +765,12 @@ type PageInfo {
 }
 
 type Query {
+  category(where: CategoryWhereUniqueInput!): Category
+  categories(where: CategoryWhereInput, orderBy: CategoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Category]!
+  categoriesConnection(where: CategoryWhereInput, orderBy: CategoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CategoryConnection!
+  categoryParticipant(where: CategoryParticipantWhereUniqueInput!): CategoryParticipant
+  categoryParticipants(where: CategoryParticipantWhereInput, orderBy: CategoryParticipantOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CategoryParticipant]!
+  categoryParticipantsConnection(where: CategoryParticipantWhereInput, orderBy: CategoryParticipantOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CategoryParticipantConnection!
   group(where: GroupWhereUniqueInput!): Group
   groups(where: GroupWhereInput, orderBy: GroupOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Group]!
   groupsConnection(where: GroupWhereInput, orderBy: GroupOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GroupConnection!
@@ -563,6 +907,8 @@ input SessionWhereUniqueInput {
 }
 
 type Subscription {
+  category(where: CategorySubscriptionWhereInput): CategorySubscriptionPayload
+  categoryParticipant(where: CategoryParticipantSubscriptionWhereInput): CategoryParticipantSubscriptionPayload
   group(where: GroupSubscriptionWhereInput): GroupSubscriptionPayload
   groupParticipant(where: GroupParticipantSubscriptionWhereInput): GroupParticipantSubscriptionPayload
   session(where: SessionSubscriptionWhereInput): SessionSubscriptionPayload
@@ -589,6 +935,11 @@ input UserCreateInput {
   name: String!
   password: String!
   groups: GroupParticipantCreateManyWithoutUserIdInput
+}
+
+input UserCreateOneInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
 }
 
 input UserCreateOneWithoutGroupsInput {
@@ -644,6 +995,13 @@ input UserSubscriptionWhereInput {
   NOT: [UserSubscriptionWhereInput!]
 }
 
+input UserUpdateDataInput {
+  email: String
+  name: String
+  password: String
+  groups: GroupParticipantUpdateManyWithoutUserIdInput
+}
+
 input UserUpdateInput {
   email: String
   name: String
@@ -655,6 +1013,15 @@ input UserUpdateManyMutationInput {
   email: String
   name: String
   password: String
+}
+
+input UserUpdateOneInput {
+  create: UserCreateInput
+  update: UserUpdateDataInput
+  upsert: UserUpsertNestedInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: UserWhereUniqueInput
 }
 
 input UserUpdateOneWithoutGroupsInput {
@@ -670,6 +1037,11 @@ input UserUpdateWithoutGroupsDataInput {
   email: String
   name: String
   password: String
+}
+
+input UserUpsertNestedInput {
+  update: UserUpdateDataInput!
+  create: UserCreateInput!
 }
 
 input UserUpsertWithoutGroupsInput {
