@@ -19,7 +19,6 @@ const resolvers = {
     },
     createGroupParticipant: async (_, args) => {
       const { groupId, userId, name } = args.data;
-      // console.log("createGroupParticipant>>", name, groupId, userId);
       return await prisma.createGroupParticipant({
         groupId: {
           connect: {
@@ -67,19 +66,16 @@ const resolvers = {
   },
   User: {
     async groupParticipants(parent) {
-      // console.log(parent);
       return await prisma.group({ id: parent.id }).groupParticipants();
     }
   },
   Group: {
     async groupParticipants(parent) {
-      // console.log("groupParticipants", parent);
       return await prisma.group({ id: parent.id }).groupParticipants();
     }
   },
   GroupParticipant: {
     async userId(parent) {
-      // console.log("GroupParticipant", parent);
       return await prisma.groupParticipant({ id: parent.id }).userId();
     }
   }

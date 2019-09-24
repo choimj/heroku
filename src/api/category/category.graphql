@@ -1,7 +1,7 @@
 type Category {
   id: ID!
   name: String!
-  categoryParticipants: [CategoryParticipant]
+  categoryParticipants: [CategoryParticipant!]
 }
 
 type CategoryParticipant {
@@ -16,11 +16,33 @@ input CategoryCreateInput {
   name: String!
 }
 
+input CategoryParticipantCreateInput {
+  id: ID
+  categoryId: String
+  userId: String
+  name: String!
+}
+
+input CategoryUpdateInput {
+  id: ID!
+  name: String!
+  categoryParticipants: [CategoryParticipantCreateInput!]
+}
+
+input CategoryWhereUniqueInput {
+  id: ID
+}
+
 type Query {
   categories: [Category]!
-  category(id: ID!): Category
+  category(id: ID): Category
 }
 
 type Mutation {
   createCategory(data: CategoryCreateInput!): Category!
+  createCategoryParticipant(
+    data: CategoryParticipantCreateInput!
+  ): CategoryParticipant!
+  updateCategory(data: CategoryUpdateInput!): Category!
+  deleteCategory(data: CategoryWhereUniqueInput!): Category
 }
