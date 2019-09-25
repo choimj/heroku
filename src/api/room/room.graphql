@@ -1,0 +1,13 @@
+type Room {
+  id: ID!
+  name: String!
+  startTime: String!
+  endTime: String!
+  standardNum: Int!
+  location: String
+}
+
+type Query {
+  rooms: [Room]!
+  room(id: ID): Room
+}

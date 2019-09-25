@@ -22,6 +22,7 @@ export interface Exists {
   ) => Promise<boolean>;
   group: (where?: GroupWhereInput) => Promise<boolean>;
   groupParticipant: (where?: GroupParticipantWhereInput) => Promise<boolean>;
+  room: (where?: RoomWhereInput) => Promise<boolean>;
   session: (where?: SessionWhereInput) => Promise<boolean>;
   user: (where?: UserWhereInput) => Promise<boolean>;
 }
@@ -125,6 +126,25 @@ export interface Prisma {
     first?: Int;
     last?: Int;
   }) => GroupParticipantConnectionPromise;
+  room: (where: RoomWhereUniqueInput) => RoomNullablePromise;
+  rooms: (args?: {
+    where?: RoomWhereInput;
+    orderBy?: RoomOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<Room>;
+  roomsConnection: (args?: {
+    where?: RoomWhereInput;
+    orderBy?: RoomOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => RoomConnectionPromise;
   session: (where: SessionWhereUniqueInput) => SessionNullablePromise;
   sessions: (args?: {
     where?: SessionWhereInput;
@@ -245,6 +265,22 @@ export interface Prisma {
   deleteManyGroupParticipants: (
     where?: GroupParticipantWhereInput
   ) => BatchPayloadPromise;
+  createRoom: (data: RoomCreateInput) => RoomPromise;
+  updateRoom: (args: {
+    data: RoomUpdateInput;
+    where: RoomWhereUniqueInput;
+  }) => RoomPromise;
+  updateManyRooms: (args: {
+    data: RoomUpdateManyMutationInput;
+    where?: RoomWhereInput;
+  }) => BatchPayloadPromise;
+  upsertRoom: (args: {
+    where: RoomWhereUniqueInput;
+    create: RoomCreateInput;
+    update: RoomUpdateInput;
+  }) => RoomPromise;
+  deleteRoom: (where: RoomWhereUniqueInput) => RoomPromise;
+  deleteManyRooms: (where?: RoomWhereInput) => BatchPayloadPromise;
   createSession: (data: SessionCreateInput) => SessionPromise;
   updateSession: (args: {
     data: SessionUpdateInput;
@@ -298,6 +334,9 @@ export interface Subscription {
   groupParticipant: (
     where?: GroupParticipantSubscriptionWhereInput
   ) => GroupParticipantSubscriptionPayloadSubscription;
+  room: (
+    where?: RoomSubscriptionWhereInput
+  ) => RoomSubscriptionPayloadSubscription;
   session: (
     where?: SessionSubscriptionWhereInput
   ) => SessionSubscriptionPayloadSubscription;
@@ -334,6 +373,20 @@ export type CategoryOrderByInput =
 
 export type GroupOrderByInput = "id_ASC" | "id_DESC" | "name_ASC" | "name_DESC";
 
+export type RoomOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "name_ASC"
+  | "name_DESC"
+  | "startTime_ASC"
+  | "startTime_DESC"
+  | "endTime_ASC"
+  | "endTime_DESC"
+  | "standardNum_ASC"
+  | "standardNum_DESC"
+  | "location_ASC"
+  | "location_DESC";
+
 export type SessionOrderByInput =
   | "id_ASC"
   | "id_DESC"
@@ -354,14 +407,24 @@ export type UserOrderByInput =
 
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
-export interface GroupParticipantUpdateWithoutUserIdDataInput {
-  groupId?: Maybe<GroupUpdateOneWithoutGroupParticipantsInput>;
-  name?: Maybe<String>;
+export interface GroupParticipantUpdateWithWhereUniqueWithoutUserIdInput {
+  where: GroupParticipantWhereUniqueInput;
+  data: GroupParticipantUpdateWithoutUserIdDataInput;
 }
 
 export type CategoryWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
 }>;
+
+export interface UserCreateOneWithoutGroupsInput {
+  create?: Maybe<UserCreateWithoutGroupsInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
+export interface CategoryUpsertWithoutCategoryParticipantsInput {
+  update: CategoryUpdateWithoutCategoryParticipantsDataInput;
+  create: CategoryCreateWithoutCategoryParticipantsInput;
+}
 
 export interface GroupParticipantUpsertWithWhereUniqueWithoutUserIdInput {
   where: GroupParticipantWhereUniqueInput;
@@ -406,15 +469,79 @@ export interface GroupWhereInput {
   NOT?: Maybe<GroupWhereInput[] | GroupWhereInput>;
 }
 
+export interface CategoryCreateInput {
+  id?: Maybe<ID_Input>;
+  name: String;
+  categoryParticipants?: Maybe<
+    CategoryParticipantCreateManyWithoutCategoryIdInput
+  >;
+}
+
+export interface RoomSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<RoomWhereInput>;
+  AND?: Maybe<RoomSubscriptionWhereInput[] | RoomSubscriptionWhereInput>;
+  OR?: Maybe<RoomSubscriptionWhereInput[] | RoomSubscriptionWhereInput>;
+  NOT?: Maybe<RoomSubscriptionWhereInput[] | RoomSubscriptionWhereInput>;
+}
+
+export interface CategoryParticipantCreateManyWithoutCategoryIdInput {
+  create?: Maybe<
+    | CategoryParticipantCreateWithoutCategoryIdInput[]
+    | CategoryParticipantCreateWithoutCategoryIdInput
+  >;
+  connect?: Maybe<
+    CategoryParticipantWhereUniqueInput[] | CategoryParticipantWhereUniqueInput
+  >;
+}
+
+export interface GroupParticipantSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<GroupParticipantWhereInput>;
+  AND?: Maybe<
+    | GroupParticipantSubscriptionWhereInput[]
+    | GroupParticipantSubscriptionWhereInput
+  >;
+  OR?: Maybe<
+    | GroupParticipantSubscriptionWhereInput[]
+    | GroupParticipantSubscriptionWhereInput
+  >;
+  NOT?: Maybe<
+    | GroupParticipantSubscriptionWhereInput[]
+    | GroupParticipantSubscriptionWhereInput
+  >;
+}
+
 export interface CategoryParticipantCreateWithoutCategoryIdInput {
   id?: Maybe<ID_Input>;
   userId?: Maybe<UserCreateOneInput>;
   name: String;
 }
 
-export interface CategoryUpsertWithoutCategoryParticipantsInput {
-  update: CategoryUpdateWithoutCategoryParticipantsDataInput;
-  create: CategoryCreateWithoutCategoryParticipantsInput;
+export interface CategoryParticipantSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<CategoryParticipantWhereInput>;
+  AND?: Maybe<
+    | CategoryParticipantSubscriptionWhereInput[]
+    | CategoryParticipantSubscriptionWhereInput
+  >;
+  OR?: Maybe<
+    | CategoryParticipantSubscriptionWhereInput[]
+    | CategoryParticipantSubscriptionWhereInput
+  >;
+  NOT?: Maybe<
+    | CategoryParticipantSubscriptionWhereInput[]
+    | CategoryParticipantSubscriptionWhereInput
+  >;
 }
 
 export interface UserCreateOneInput {
@@ -422,44 +549,10 @@ export interface UserCreateOneInput {
   connect?: Maybe<UserWhereUniqueInput>;
 }
 
-export interface GroupParticipantScalarWhereInput {
-  id?: Maybe<ID_Input>;
-  id_not?: Maybe<ID_Input>;
-  id_in?: Maybe<ID_Input[] | ID_Input>;
-  id_not_in?: Maybe<ID_Input[] | ID_Input>;
-  id_lt?: Maybe<ID_Input>;
-  id_lte?: Maybe<ID_Input>;
-  id_gt?: Maybe<ID_Input>;
-  id_gte?: Maybe<ID_Input>;
-  id_contains?: Maybe<ID_Input>;
-  id_not_contains?: Maybe<ID_Input>;
-  id_starts_with?: Maybe<ID_Input>;
-  id_not_starts_with?: Maybe<ID_Input>;
-  id_ends_with?: Maybe<ID_Input>;
-  id_not_ends_with?: Maybe<ID_Input>;
+export interface UserUpdateManyMutationInput {
+  email?: Maybe<String>;
   name?: Maybe<String>;
-  name_not?: Maybe<String>;
-  name_in?: Maybe<String[] | String>;
-  name_not_in?: Maybe<String[] | String>;
-  name_lt?: Maybe<String>;
-  name_lte?: Maybe<String>;
-  name_gt?: Maybe<String>;
-  name_gte?: Maybe<String>;
-  name_contains?: Maybe<String>;
-  name_not_contains?: Maybe<String>;
-  name_starts_with?: Maybe<String>;
-  name_not_starts_with?: Maybe<String>;
-  name_ends_with?: Maybe<String>;
-  name_not_ends_with?: Maybe<String>;
-  AND?: Maybe<
-    GroupParticipantScalarWhereInput[] | GroupParticipantScalarWhereInput
-  >;
-  OR?: Maybe<
-    GroupParticipantScalarWhereInput[] | GroupParticipantScalarWhereInput
-  >;
-  NOT?: Maybe<
-    GroupParticipantScalarWhereInput[] | GroupParticipantScalarWhereInput
-  >;
+  password?: Maybe<String>;
 }
 
 export interface UserCreateInput {
@@ -470,15 +563,11 @@ export interface UserCreateInput {
   groups?: Maybe<GroupParticipantCreateManyWithoutUserIdInput>;
 }
 
-export interface UserSubscriptionWhereInput {
-  mutation_in?: Maybe<MutationType[] | MutationType>;
-  updatedFields_contains?: Maybe<String>;
-  updatedFields_contains_every?: Maybe<String[] | String>;
-  updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<UserWhereInput>;
-  AND?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
-  OR?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
-  NOT?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
+export interface UserUpdateInput {
+  email?: Maybe<String>;
+  name?: Maybe<String>;
+  password?: Maybe<String>;
+  groups?: Maybe<GroupParticipantUpdateManyWithoutUserIdInput>;
 }
 
 export interface GroupParticipantCreateManyWithoutUserIdInput {
@@ -489,6 +578,17 @@ export interface GroupParticipantCreateManyWithoutUserIdInput {
   connect?: Maybe<
     GroupParticipantWhereUniqueInput[] | GroupParticipantWhereUniqueInput
   >;
+}
+
+export interface SessionUpdateInput {
+  email?: Maybe<String>;
+  token?: Maybe<String>;
+}
+
+export interface GroupParticipantCreateWithoutUserIdInput {
+  id?: Maybe<ID_Input>;
+  groupId?: Maybe<GroupCreateOneWithoutGroupParticipantsInput>;
+  name: String;
 }
 
 export interface UserWhereInput {
@@ -556,41 +656,17 @@ export interface UserWhereInput {
   NOT?: Maybe<UserWhereInput[] | UserWhereInput>;
 }
 
-export interface GroupParticipantCreateWithoutUserIdInput {
-  id?: Maybe<ID_Input>;
-  groupId?: Maybe<GroupCreateOneWithoutGroupParticipantsInput>;
-  name: String;
-}
-
-export interface GroupSubscriptionWhereInput {
-  mutation_in?: Maybe<MutationType[] | MutationType>;
-  updatedFields_contains?: Maybe<String>;
-  updatedFields_contains_every?: Maybe<String[] | String>;
-  updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<GroupWhereInput>;
-  AND?: Maybe<GroupSubscriptionWhereInput[] | GroupSubscriptionWhereInput>;
-  OR?: Maybe<GroupSubscriptionWhereInput[] | GroupSubscriptionWhereInput>;
-  NOT?: Maybe<GroupSubscriptionWhereInput[] | GroupSubscriptionWhereInput>;
-}
-
 export interface GroupCreateOneWithoutGroupParticipantsInput {
   create?: Maybe<GroupCreateWithoutGroupParticipantsInput>;
   connect?: Maybe<GroupWhereUniqueInput>;
 }
 
-export interface CategorySubscriptionWhereInput {
-  mutation_in?: Maybe<MutationType[] | MutationType>;
-  updatedFields_contains?: Maybe<String>;
-  updatedFields_contains_every?: Maybe<String[] | String>;
-  updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<CategoryWhereInput>;
-  AND?: Maybe<
-    CategorySubscriptionWhereInput[] | CategorySubscriptionWhereInput
-  >;
-  OR?: Maybe<CategorySubscriptionWhereInput[] | CategorySubscriptionWhereInput>;
-  NOT?: Maybe<
-    CategorySubscriptionWhereInput[] | CategorySubscriptionWhereInput
-  >;
+export interface RoomUpdateManyMutationInput {
+  name?: Maybe<String>;
+  startTime?: Maybe<String>;
+  endTime?: Maybe<String>;
+  standardNum?: Maybe<Int>;
+  location?: Maybe<String>;
 }
 
 export interface GroupCreateWithoutGroupParticipantsInput {
@@ -598,7 +674,7 @@ export interface GroupCreateWithoutGroupParticipantsInput {
   name: String;
 }
 
-export type CategoryParticipantWhereUniqueInput = AtLeastOne<{
+export type GroupParticipantWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
 }>;
 
@@ -609,9 +685,8 @@ export interface CategoryUpdateInput {
   >;
 }
 
-export interface SessionUpdateManyMutationInput {
-  email?: Maybe<String>;
-  token?: Maybe<String>;
+export interface GroupParticipantUpdateManyMutationInput {
+  name?: Maybe<String>;
 }
 
 export interface CategoryParticipantUpdateManyWithoutCategoryIdInput {
@@ -648,7 +723,7 @@ export interface CategoryParticipantUpdateManyWithoutCategoryIdInput {
   >;
 }
 
-export type GroupWhereUniqueInput = AtLeastOne<{
+export type RoomWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
 }>;
 
@@ -657,10 +732,88 @@ export interface CategoryParticipantUpdateWithWhereUniqueWithoutCategoryIdInput 
   data: CategoryParticipantUpdateWithoutCategoryIdDataInput;
 }
 
-export interface SessionCreateInput {
+export interface RoomWhereInput {
   id?: Maybe<ID_Input>;
-  email: String;
-  token: String;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  name?: Maybe<String>;
+  name_not?: Maybe<String>;
+  name_in?: Maybe<String[] | String>;
+  name_not_in?: Maybe<String[] | String>;
+  name_lt?: Maybe<String>;
+  name_lte?: Maybe<String>;
+  name_gt?: Maybe<String>;
+  name_gte?: Maybe<String>;
+  name_contains?: Maybe<String>;
+  name_not_contains?: Maybe<String>;
+  name_starts_with?: Maybe<String>;
+  name_not_starts_with?: Maybe<String>;
+  name_ends_with?: Maybe<String>;
+  name_not_ends_with?: Maybe<String>;
+  startTime?: Maybe<String>;
+  startTime_not?: Maybe<String>;
+  startTime_in?: Maybe<String[] | String>;
+  startTime_not_in?: Maybe<String[] | String>;
+  startTime_lt?: Maybe<String>;
+  startTime_lte?: Maybe<String>;
+  startTime_gt?: Maybe<String>;
+  startTime_gte?: Maybe<String>;
+  startTime_contains?: Maybe<String>;
+  startTime_not_contains?: Maybe<String>;
+  startTime_starts_with?: Maybe<String>;
+  startTime_not_starts_with?: Maybe<String>;
+  startTime_ends_with?: Maybe<String>;
+  startTime_not_ends_with?: Maybe<String>;
+  endTime?: Maybe<String>;
+  endTime_not?: Maybe<String>;
+  endTime_in?: Maybe<String[] | String>;
+  endTime_not_in?: Maybe<String[] | String>;
+  endTime_lt?: Maybe<String>;
+  endTime_lte?: Maybe<String>;
+  endTime_gt?: Maybe<String>;
+  endTime_gte?: Maybe<String>;
+  endTime_contains?: Maybe<String>;
+  endTime_not_contains?: Maybe<String>;
+  endTime_starts_with?: Maybe<String>;
+  endTime_not_starts_with?: Maybe<String>;
+  endTime_ends_with?: Maybe<String>;
+  endTime_not_ends_with?: Maybe<String>;
+  standardNum?: Maybe<Int>;
+  standardNum_not?: Maybe<Int>;
+  standardNum_in?: Maybe<Int[] | Int>;
+  standardNum_not_in?: Maybe<Int[] | Int>;
+  standardNum_lt?: Maybe<Int>;
+  standardNum_lte?: Maybe<Int>;
+  standardNum_gt?: Maybe<Int>;
+  standardNum_gte?: Maybe<Int>;
+  location?: Maybe<String>;
+  location_not?: Maybe<String>;
+  location_in?: Maybe<String[] | String>;
+  location_not_in?: Maybe<String[] | String>;
+  location_lt?: Maybe<String>;
+  location_lte?: Maybe<String>;
+  location_gt?: Maybe<String>;
+  location_gte?: Maybe<String>;
+  location_contains?: Maybe<String>;
+  location_not_contains?: Maybe<String>;
+  location_starts_with?: Maybe<String>;
+  location_not_starts_with?: Maybe<String>;
+  location_ends_with?: Maybe<String>;
+  location_not_ends_with?: Maybe<String>;
+  AND?: Maybe<RoomWhereInput[] | RoomWhereInput>;
+  OR?: Maybe<RoomWhereInput[] | RoomWhereInput>;
+  NOT?: Maybe<RoomWhereInput[] | RoomWhereInput>;
 }
 
 export interface CategoryParticipantUpdateWithoutCategoryIdDataInput {
@@ -668,9 +821,7 @@ export interface CategoryParticipantUpdateWithoutCategoryIdDataInput {
   name?: Maybe<String>;
 }
 
-export interface GroupParticipantUpdateInput {
-  groupId?: Maybe<GroupUpdateOneWithoutGroupParticipantsInput>;
-  userId?: Maybe<UserUpdateOneWithoutGroupsInput>;
+export interface GroupUpdateManyMutationInput {
   name?: Maybe<String>;
 }
 
@@ -683,11 +834,9 @@ export interface UserUpdateOneInput {
   connect?: Maybe<UserWhereUniqueInput>;
 }
 
-export interface GroupParticipantCreateInput {
-  id?: Maybe<ID_Input>;
-  groupId?: Maybe<GroupCreateOneWithoutGroupParticipantsInput>;
-  userId?: Maybe<UserCreateOneWithoutGroupsInput>;
-  name: String;
+export interface UserUpsertWithoutGroupsInput {
+  update: UserUpdateWithoutGroupsDataInput;
+  create: UserCreateWithoutGroupsInput;
 }
 
 export interface UserUpdateDataInput {
@@ -697,10 +846,10 @@ export interface UserUpdateDataInput {
   groups?: Maybe<GroupParticipantUpdateManyWithoutUserIdInput>;
 }
 
-export interface GroupParticipantUpsertWithWhereUniqueWithoutGroupIdInput {
-  where: GroupParticipantWhereUniqueInput;
-  update: GroupParticipantUpdateWithoutGroupIdDataInput;
-  create: GroupParticipantCreateWithoutGroupIdInput;
+export interface UserUpdateWithoutGroupsDataInput {
+  email?: Maybe<String>;
+  name?: Maybe<String>;
+  password?: Maybe<String>;
 }
 
 export interface GroupParticipantUpdateManyWithoutUserIdInput {
@@ -735,16 +884,6 @@ export interface GroupParticipantUpdateManyWithoutUserIdInput {
     | GroupParticipantUpdateManyWithWhereNestedInput[]
     | GroupParticipantUpdateManyWithWhereNestedInput
   >;
-}
-
-export interface UserUpsertWithoutGroupsInput {
-  update: UserUpdateWithoutGroupsDataInput;
-  create: UserCreateWithoutGroupsInput;
-}
-
-export interface GroupParticipantUpdateWithWhereUniqueWithoutUserIdInput {
-  where: GroupParticipantWhereUniqueInput;
-  data: GroupParticipantUpdateWithoutUserIdDataInput;
 }
 
 export interface CategoryParticipantWhereInput {
@@ -783,19 +922,26 @@ export interface CategoryParticipantWhereInput {
   NOT?: Maybe<CategoryParticipantWhereInput[] | CategoryParticipantWhereInput>;
 }
 
-export interface UserCreateOneWithoutGroupsInput {
-  create?: Maybe<UserCreateWithoutGroupsInput>;
-  connect?: Maybe<UserWhereUniqueInput>;
+export interface GroupParticipantCreateWithoutGroupIdInput {
+  id?: Maybe<ID_Input>;
+  userId?: Maybe<UserCreateOneWithoutGroupsInput>;
+  name: String;
 }
 
-export interface UserUpdateOneWithoutGroupsInput {
-  create?: Maybe<UserCreateWithoutGroupsInput>;
-  update?: Maybe<UserUpdateWithoutGroupsDataInput>;
-  upsert?: Maybe<UserUpsertWithoutGroupsInput>;
-  delete?: Maybe<Boolean>;
-  disconnect?: Maybe<Boolean>;
-  connect?: Maybe<UserWhereUniqueInput>;
+export interface GroupParticipantUpdateWithoutGroupIdDataInput {
+  userId?: Maybe<UserUpdateOneWithoutGroupsInput>;
+  name?: Maybe<String>;
 }
+
+export interface GroupParticipantUpdateWithoutUserIdDataInput {
+  groupId?: Maybe<GroupUpdateOneWithoutGroupParticipantsInput>;
+  name?: Maybe<String>;
+}
+
+export type UserWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+  email?: Maybe<String>;
+}>;
 
 export interface GroupUpdateOneWithoutGroupParticipantsInput {
   create?: Maybe<GroupCreateWithoutGroupParticipantsInput>;
@@ -806,83 +952,29 @@ export interface GroupUpdateOneWithoutGroupParticipantsInput {
   connect?: Maybe<GroupWhereUniqueInput>;
 }
 
-export type UserWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-  email?: Maybe<String>;
-}>;
+export interface GroupUpdateInput {
+  name?: Maybe<String>;
+  groupParticipants?: Maybe<GroupParticipantUpdateManyWithoutGroupIdInput>;
+}
 
 export interface GroupUpdateWithoutGroupParticipantsDataInput {
   name?: Maybe<String>;
 }
 
-export interface GroupParticipantUpdateManyWithoutGroupIdInput {
-  create?: Maybe<
-    | GroupParticipantCreateWithoutGroupIdInput[]
-    | GroupParticipantCreateWithoutGroupIdInput
-  >;
-  delete?: Maybe<
-    GroupParticipantWhereUniqueInput[] | GroupParticipantWhereUniqueInput
-  >;
-  connect?: Maybe<
-    GroupParticipantWhereUniqueInput[] | GroupParticipantWhereUniqueInput
-  >;
-  set?: Maybe<
-    GroupParticipantWhereUniqueInput[] | GroupParticipantWhereUniqueInput
-  >;
-  disconnect?: Maybe<
-    GroupParticipantWhereUniqueInput[] | GroupParticipantWhereUniqueInput
-  >;
-  update?: Maybe<
-    | GroupParticipantUpdateWithWhereUniqueWithoutGroupIdInput[]
-    | GroupParticipantUpdateWithWhereUniqueWithoutGroupIdInput
-  >;
-  upsert?: Maybe<
-    | GroupParticipantUpsertWithWhereUniqueWithoutGroupIdInput[]
-    | GroupParticipantUpsertWithWhereUniqueWithoutGroupIdInput
-  >;
-  deleteMany?: Maybe<
-    GroupParticipantScalarWhereInput[] | GroupParticipantScalarWhereInput
-  >;
-  updateMany?: Maybe<
-    | GroupParticipantUpdateManyWithWhereNestedInput[]
-    | GroupParticipantUpdateManyWithWhereNestedInput
-  >;
+export interface UserSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<UserWhereInput>;
+  AND?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
+  OR?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
+  NOT?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
 }
 
 export interface GroupUpsertWithoutGroupParticipantsInput {
   update: GroupUpdateWithoutGroupParticipantsDataInput;
   create: GroupCreateWithoutGroupParticipantsInput;
-}
-
-export interface UserCreateWithoutGroupsInput {
-  id?: Maybe<ID_Input>;
-  email: String;
-  name: String;
-  password: String;
-}
-
-export interface GroupParticipantCreateWithoutGroupIdInput {
-  id?: Maybe<ID_Input>;
-  userId?: Maybe<UserCreateOneWithoutGroupsInput>;
-  name: String;
-}
-
-export interface CategoryCreateInput {
-  id?: Maybe<ID_Input>;
-  name: String;
-  categoryParticipants?: Maybe<
-    CategoryParticipantCreateManyWithoutCategoryIdInput
-  >;
-}
-
-export interface GroupParticipantCreateManyWithoutGroupIdInput {
-  create?: Maybe<
-    | GroupParticipantCreateWithoutGroupIdInput[]
-    | GroupParticipantCreateWithoutGroupIdInput
-  >;
-  connect?: Maybe<
-    GroupParticipantWhereUniqueInput[] | GroupParticipantWhereUniqueInput
-  >;
 }
 
 export interface GroupParticipantWhereInput {
@@ -921,39 +1013,98 @@ export interface GroupParticipantWhereInput {
   NOT?: Maybe<GroupParticipantWhereInput[] | GroupParticipantWhereInput>;
 }
 
+export interface GroupParticipantCreateManyWithoutGroupIdInput {
+  create?: Maybe<
+    | GroupParticipantCreateWithoutGroupIdInput[]
+    | GroupParticipantCreateWithoutGroupIdInput
+  >;
+  connect?: Maybe<
+    GroupParticipantWhereUniqueInput[] | GroupParticipantWhereUniqueInput
+  >;
+}
+
+export interface CategorySubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<CategoryWhereInput>;
+  AND?: Maybe<
+    CategorySubscriptionWhereInput[] | CategorySubscriptionWhereInput
+  >;
+  OR?: Maybe<CategorySubscriptionWhereInput[] | CategorySubscriptionWhereInput>;
+  NOT?: Maybe<
+    CategorySubscriptionWhereInput[] | CategorySubscriptionWhereInput
+  >;
+}
+
+export interface GroupParticipantScalarWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  name?: Maybe<String>;
+  name_not?: Maybe<String>;
+  name_in?: Maybe<String[] | String>;
+  name_not_in?: Maybe<String[] | String>;
+  name_lt?: Maybe<String>;
+  name_lte?: Maybe<String>;
+  name_gt?: Maybe<String>;
+  name_gte?: Maybe<String>;
+  name_contains?: Maybe<String>;
+  name_not_contains?: Maybe<String>;
+  name_starts_with?: Maybe<String>;
+  name_not_starts_with?: Maybe<String>;
+  name_ends_with?: Maybe<String>;
+  name_not_ends_with?: Maybe<String>;
+  AND?: Maybe<
+    GroupParticipantScalarWhereInput[] | GroupParticipantScalarWhereInput
+  >;
+  OR?: Maybe<
+    GroupParticipantScalarWhereInput[] | GroupParticipantScalarWhereInput
+  >;
+  NOT?: Maybe<
+    GroupParticipantScalarWhereInput[] | GroupParticipantScalarWhereInput
+  >;
+}
+
+export interface SessionUpdateManyMutationInput {
+  email?: Maybe<String>;
+  token?: Maybe<String>;
+}
+
 export interface GroupParticipantUpdateManyWithWhereNestedInput {
   where: GroupParticipantScalarWhereInput;
   data: GroupParticipantUpdateManyDataInput;
 }
 
-export interface GroupParticipantSubscriptionWhereInput {
-  mutation_in?: Maybe<MutationType[] | MutationType>;
-  updatedFields_contains?: Maybe<String>;
-  updatedFields_contains_every?: Maybe<String[] | String>;
-  updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<GroupParticipantWhereInput>;
-  AND?: Maybe<
-    | GroupParticipantSubscriptionWhereInput[]
-    | GroupParticipantSubscriptionWhereInput
-  >;
-  OR?: Maybe<
-    | GroupParticipantSubscriptionWhereInput[]
-    | GroupParticipantSubscriptionWhereInput
-  >;
-  NOT?: Maybe<
-    | GroupParticipantSubscriptionWhereInput[]
-    | GroupParticipantSubscriptionWhereInput
-  >;
+export interface SessionCreateInput {
+  id?: Maybe<ID_Input>;
+  email: String;
+  token: String;
 }
 
 export interface GroupParticipantUpdateManyDataInput {
   name?: Maybe<String>;
 }
 
-export interface UserUpdateManyMutationInput {
-  email?: Maybe<String>;
-  name?: Maybe<String>;
-  password?: Maybe<String>;
+export interface RoomCreateInput {
+  id?: Maybe<ID_Input>;
+  name: String;
+  startTime: String;
+  endTime: String;
+  standardNum: Int;
+  location?: Maybe<String>;
 }
 
 export interface UserUpsertNestedInput {
@@ -961,9 +1112,11 @@ export interface UserUpsertNestedInput {
   create: UserCreateInput;
 }
 
-export interface SessionUpdateInput {
-  email?: Maybe<String>;
-  token?: Maybe<String>;
+export interface GroupParticipantCreateInput {
+  id?: Maybe<ID_Input>;
+  groupId?: Maybe<GroupCreateOneWithoutGroupParticipantsInput>;
+  userId?: Maybe<UserCreateOneWithoutGroupsInput>;
+  name: String;
 }
 
 export interface CategoryParticipantUpsertWithWhereUniqueWithoutCategoryIdInput {
@@ -972,8 +1125,10 @@ export interface CategoryParticipantUpsertWithWhereUniqueWithoutCategoryIdInput 
   create: CategoryParticipantCreateWithoutCategoryIdInput;
 }
 
-export interface GroupParticipantUpdateManyMutationInput {
-  name?: Maybe<String>;
+export interface GroupParticipantUpsertWithWhereUniqueWithoutGroupIdInput {
+  where: GroupParticipantWhereUniqueInput;
+  update: GroupParticipantUpdateWithoutGroupIdDataInput;
+  create: GroupParticipantCreateWithoutGroupIdInput;
 }
 
 export interface CategoryParticipantScalarWhereInput {
@@ -1014,15 +1169,6 @@ export interface CategoryParticipantScalarWhereInput {
   NOT?: Maybe<
     CategoryParticipantScalarWhereInput[] | CategoryParticipantScalarWhereInput
   >;
-}
-
-export interface GroupUpdateManyMutationInput {
-  name?: Maybe<String>;
-}
-
-export interface CategoryParticipantUpdateManyWithWhereNestedInput {
-  where: CategoryParticipantScalarWhereInput;
-  data: CategoryParticipantUpdateManyDataInput;
 }
 
 export interface SessionWhereInput {
@@ -1073,22 +1219,40 @@ export interface SessionWhereInput {
   NOT?: Maybe<SessionWhereInput[] | SessionWhereInput>;
 }
 
+export interface CategoryParticipantUpdateManyWithWhereNestedInput {
+  where: CategoryParticipantScalarWhereInput;
+  data: CategoryParticipantUpdateManyDataInput;
+}
+
+export interface GroupParticipantUpdateWithWhereUniqueWithoutGroupIdInput {
+  where: GroupParticipantWhereUniqueInput;
+  data: GroupParticipantUpdateWithoutGroupIdDataInput;
+}
+
 export interface CategoryParticipantUpdateManyDataInput {
   name?: Maybe<String>;
 }
 
-export interface GroupParticipantUpdateWithoutGroupIdDataInput {
-  userId?: Maybe<UserUpdateOneWithoutGroupsInput>;
-  name?: Maybe<String>;
+export interface UserCreateWithoutGroupsInput {
+  id?: Maybe<ID_Input>;
+  email: String;
+  name: String;
+  password: String;
 }
 
 export interface CategoryUpdateManyMutationInput {
   name?: Maybe<String>;
 }
 
-export interface GroupUpdateInput {
-  name?: Maybe<String>;
-  groupParticipants?: Maybe<GroupParticipantUpdateManyWithoutGroupIdInput>;
+export interface GroupSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<GroupWhereInput>;
+  AND?: Maybe<GroupSubscriptionWhereInput[] | GroupSubscriptionWhereInput>;
+  OR?: Maybe<GroupSubscriptionWhereInput[] | GroupSubscriptionWhereInput>;
+  NOT?: Maybe<GroupSubscriptionWhereInput[] | GroupSubscriptionWhereInput>;
 }
 
 export interface GroupCreateInput {
@@ -1097,38 +1261,18 @@ export interface GroupCreateInput {
   groupParticipants?: Maybe<GroupParticipantCreateManyWithoutGroupIdInput>;
 }
 
-export interface CategoryParticipantCreateManyWithoutCategoryIdInput {
-  create?: Maybe<
-    | CategoryParticipantCreateWithoutCategoryIdInput[]
-    | CategoryParticipantCreateWithoutCategoryIdInput
-  >;
-  connect?: Maybe<
-    CategoryParticipantWhereUniqueInput[] | CategoryParticipantWhereUniqueInput
-  >;
-}
+export type GroupWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
 
 export interface CategoryParticipantUpdateManyMutationInput {
   name?: Maybe<String>;
 }
 
-export interface CategoryParticipantSubscriptionWhereInput {
-  mutation_in?: Maybe<MutationType[] | MutationType>;
-  updatedFields_contains?: Maybe<String>;
-  updatedFields_contains_every?: Maybe<String[] | String>;
-  updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<CategoryParticipantWhereInput>;
-  AND?: Maybe<
-    | CategoryParticipantSubscriptionWhereInput[]
-    | CategoryParticipantSubscriptionWhereInput
-  >;
-  OR?: Maybe<
-    | CategoryParticipantSubscriptionWhereInput[]
-    | CategoryParticipantSubscriptionWhereInput
-  >;
-  NOT?: Maybe<
-    | CategoryParticipantSubscriptionWhereInput[]
-    | CategoryParticipantSubscriptionWhereInput
-  >;
+export interface GroupParticipantUpdateInput {
+  groupId?: Maybe<GroupUpdateOneWithoutGroupParticipantsInput>;
+  userId?: Maybe<UserUpdateOneWithoutGroupsInput>;
+  name?: Maybe<String>;
 }
 
 export interface CategoryParticipantCreateInput {
@@ -1136,6 +1280,95 @@ export interface CategoryParticipantCreateInput {
   categoryId?: Maybe<CategoryCreateOneWithoutCategoryParticipantsInput>;
   userId?: Maybe<UserCreateOneInput>;
   name: String;
+}
+
+export type SessionWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+  email?: Maybe<String>;
+  token?: Maybe<String>;
+}>;
+
+export interface CategoryCreateOneWithoutCategoryParticipantsInput {
+  create?: Maybe<CategoryCreateWithoutCategoryParticipantsInput>;
+  connect?: Maybe<CategoryWhereUniqueInput>;
+}
+
+export interface GroupParticipantUpdateManyWithoutGroupIdInput {
+  create?: Maybe<
+    | GroupParticipantCreateWithoutGroupIdInput[]
+    | GroupParticipantCreateWithoutGroupIdInput
+  >;
+  delete?: Maybe<
+    GroupParticipantWhereUniqueInput[] | GroupParticipantWhereUniqueInput
+  >;
+  connect?: Maybe<
+    GroupParticipantWhereUniqueInput[] | GroupParticipantWhereUniqueInput
+  >;
+  set?: Maybe<
+    GroupParticipantWhereUniqueInput[] | GroupParticipantWhereUniqueInput
+  >;
+  disconnect?: Maybe<
+    GroupParticipantWhereUniqueInput[] | GroupParticipantWhereUniqueInput
+  >;
+  update?: Maybe<
+    | GroupParticipantUpdateWithWhereUniqueWithoutGroupIdInput[]
+    | GroupParticipantUpdateWithWhereUniqueWithoutGroupIdInput
+  >;
+  upsert?: Maybe<
+    | GroupParticipantUpsertWithWhereUniqueWithoutGroupIdInput[]
+    | GroupParticipantUpsertWithWhereUniqueWithoutGroupIdInput
+  >;
+  deleteMany?: Maybe<
+    GroupParticipantScalarWhereInput[] | GroupParticipantScalarWhereInput
+  >;
+  updateMany?: Maybe<
+    | GroupParticipantUpdateManyWithWhereNestedInput[]
+    | GroupParticipantUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface CategoryUpdateWithoutCategoryParticipantsDataInput {
+  name?: Maybe<String>;
+}
+
+export interface CategoryUpdateOneWithoutCategoryParticipantsInput {
+  create?: Maybe<CategoryCreateWithoutCategoryParticipantsInput>;
+  update?: Maybe<CategoryUpdateWithoutCategoryParticipantsDataInput>;
+  upsert?: Maybe<CategoryUpsertWithoutCategoryParticipantsInput>;
+  delete?: Maybe<Boolean>;
+  disconnect?: Maybe<Boolean>;
+  connect?: Maybe<CategoryWhereUniqueInput>;
+}
+
+export interface CategoryParticipantUpdateInput {
+  categoryId?: Maybe<CategoryUpdateOneWithoutCategoryParticipantsInput>;
+  userId?: Maybe<UserUpdateOneInput>;
+  name?: Maybe<String>;
+}
+
+export interface CategoryCreateWithoutCategoryParticipantsInput {
+  id?: Maybe<ID_Input>;
+  name: String;
+}
+
+export interface SessionSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<SessionWhereInput>;
+  AND?: Maybe<SessionSubscriptionWhereInput[] | SessionSubscriptionWhereInput>;
+  OR?: Maybe<SessionSubscriptionWhereInput[] | SessionSubscriptionWhereInput>;
+  NOT?: Maybe<SessionSubscriptionWhereInput[] | SessionSubscriptionWhereInput>;
+}
+
+export interface UserUpdateOneWithoutGroupsInput {
+  create?: Maybe<UserCreateWithoutGroupsInput>;
+  update?: Maybe<UserUpdateWithoutGroupsDataInput>;
+  upsert?: Maybe<UserUpsertWithoutGroupsInput>;
+  delete?: Maybe<Boolean>;
+  disconnect?: Maybe<Boolean>;
+  connect?: Maybe<UserWhereUniqueInput>;
 }
 
 export interface CategoryWhereInput {
@@ -1175,73 +1408,17 @@ export interface CategoryWhereInput {
   NOT?: Maybe<CategoryWhereInput[] | CategoryWhereInput>;
 }
 
-export interface CategoryCreateOneWithoutCategoryParticipantsInput {
-  create?: Maybe<CategoryCreateWithoutCategoryParticipantsInput>;
-  connect?: Maybe<CategoryWhereUniqueInput>;
-}
-
-export type SessionWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-  email?: Maybe<String>;
-  token?: Maybe<String>;
-}>;
-
-export interface GroupParticipantUpdateWithWhereUniqueWithoutGroupIdInput {
-  where: GroupParticipantWhereUniqueInput;
-  data: GroupParticipantUpdateWithoutGroupIdDataInput;
-}
-
-export interface CategoryUpdateWithoutCategoryParticipantsDataInput {
+export interface RoomUpdateInput {
   name?: Maybe<String>;
+  startTime?: Maybe<String>;
+  endTime?: Maybe<String>;
+  standardNum?: Maybe<Int>;
+  location?: Maybe<String>;
 }
 
-export interface CategoryUpdateOneWithoutCategoryParticipantsInput {
-  create?: Maybe<CategoryCreateWithoutCategoryParticipantsInput>;
-  update?: Maybe<CategoryUpdateWithoutCategoryParticipantsDataInput>;
-  upsert?: Maybe<CategoryUpsertWithoutCategoryParticipantsInput>;
-  delete?: Maybe<Boolean>;
-  disconnect?: Maybe<Boolean>;
-  connect?: Maybe<CategoryWhereUniqueInput>;
-}
-
-export interface CategoryParticipantUpdateInput {
-  categoryId?: Maybe<CategoryUpdateOneWithoutCategoryParticipantsInput>;
-  userId?: Maybe<UserUpdateOneInput>;
-  name?: Maybe<String>;
-}
-
-export interface CategoryCreateWithoutCategoryParticipantsInput {
-  id?: Maybe<ID_Input>;
-  name: String;
-}
-
-export interface UserUpdateWithoutGroupsDataInput {
-  email?: Maybe<String>;
-  name?: Maybe<String>;
-  password?: Maybe<String>;
-}
-
-export type GroupParticipantWhereUniqueInput = AtLeastOne<{
+export type CategoryParticipantWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
 }>;
-
-export interface UserUpdateInput {
-  email?: Maybe<String>;
-  name?: Maybe<String>;
-  password?: Maybe<String>;
-  groups?: Maybe<GroupParticipantUpdateManyWithoutUserIdInput>;
-}
-
-export interface SessionSubscriptionWhereInput {
-  mutation_in?: Maybe<MutationType[] | MutationType>;
-  updatedFields_contains?: Maybe<String>;
-  updatedFields_contains_every?: Maybe<String[] | String>;
-  updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<SessionWhereInput>;
-  AND?: Maybe<SessionSubscriptionWhereInput[] | SessionSubscriptionWhereInput>;
-  OR?: Maybe<SessionSubscriptionWhereInput[] | SessionSubscriptionWhereInput>;
-  NOT?: Maybe<SessionSubscriptionWhereInput[] | SessionSubscriptionWhereInput>;
-}
 
 export interface NodeNode {
   id: ID_Output;
@@ -1272,6 +1449,66 @@ export interface UserPreviousValuesSubscription
   password: () => Promise<AsyncIterator<String>>;
 }
 
+export interface AggregateCategoryParticipant {
+  count: Int;
+}
+
+export interface AggregateCategoryParticipantPromise
+  extends Promise<AggregateCategoryParticipant>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateCategoryParticipantSubscription
+  extends Promise<AsyncIterator<AggregateCategoryParticipant>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface SessionSubscriptionPayload {
+  mutation: MutationType;
+  node: Session;
+  updatedFields: String[];
+  previousValues: SessionPreviousValues;
+}
+
+export interface SessionSubscriptionPayloadPromise
+  extends Promise<SessionSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = SessionPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = SessionPreviousValuesPromise>() => T;
+}
+
+export interface SessionSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<SessionSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = SessionSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = SessionPreviousValuesSubscription>() => T;
+}
+
+export interface CategoryParticipantEdge {
+  node: CategoryParticipant;
+  cursor: String;
+}
+
+export interface CategoryParticipantEdgePromise
+  extends Promise<CategoryParticipantEdge>,
+    Fragmentable {
+  node: <T = CategoryParticipantPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface CategoryParticipantEdgeSubscription
+  extends Promise<AsyncIterator<CategoryParticipantEdge>>,
+    Fragmentable {
+  node: <T = CategoryParticipantSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
 export interface CategoryParticipantConnection {
   pageInfo: PageInfo;
   edges: CategoryParticipantEdge[];
@@ -1295,36 +1532,45 @@ export interface CategoryParticipantConnectionSubscription
   aggregate: <T = AggregateCategoryParticipantSubscription>() => T;
 }
 
-export interface CategoryParticipant {
-  id: ID_Output;
-  name: String;
+export interface BatchPayload {
+  count: Long;
 }
 
-export interface CategoryParticipantPromise
-  extends Promise<CategoryParticipant>,
+export interface BatchPayloadPromise
+  extends Promise<BatchPayload>,
     Fragmentable {
-  id: () => Promise<ID_Output>;
-  categoryId: <T = CategoryPromise>() => T;
-  userId: <T = UserPromise>() => T;
-  name: () => Promise<String>;
+  count: () => Promise<Long>;
 }
 
-export interface CategoryParticipantSubscription
-  extends Promise<AsyncIterator<CategoryParticipant>>,
+export interface BatchPayloadSubscription
+  extends Promise<AsyncIterator<BatchPayload>>,
     Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  categoryId: <T = CategorySubscription>() => T;
-  userId: <T = UserSubscription>() => T;
-  name: () => Promise<AsyncIterator<String>>;
+  count: () => Promise<AsyncIterator<Long>>;
 }
 
-export interface CategoryParticipantNullablePromise
-  extends Promise<CategoryParticipant | null>,
+export interface UserSubscriptionPayload {
+  mutation: MutationType;
+  node: User;
+  updatedFields: String[];
+  previousValues: UserPreviousValues;
+}
+
+export interface UserSubscriptionPayloadPromise
+  extends Promise<UserSubscriptionPayload>,
     Fragmentable {
-  id: () => Promise<ID_Output>;
-  categoryId: <T = CategoryPromise>() => T;
-  userId: <T = UserPromise>() => T;
-  name: () => Promise<String>;
+  mutation: () => Promise<MutationType>;
+  node: <T = UserPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = UserPreviousValuesPromise>() => T;
+}
+
+export interface UserSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<UserSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = UserSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = UserPreviousValuesSubscription>() => T;
 }
 
 export interface AggregateCategory {
@@ -1341,6 +1587,42 @@ export interface AggregateCategorySubscription
   extends Promise<AsyncIterator<AggregateCategory>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface UserEdge {
+  node: User;
+  cursor: String;
+}
+
+export interface UserEdgePromise extends Promise<UserEdge>, Fragmentable {
+  node: <T = UserPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface UserEdgeSubscription
+  extends Promise<AsyncIterator<UserEdge>>,
+    Fragmentable {
+  node: <T = UserSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface CategoryEdge {
+  node: Category;
+  cursor: String;
+}
+
+export interface CategoryEdgePromise
+  extends Promise<CategoryEdge>,
+    Fragmentable {
+  node: <T = CategoryPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface CategoryEdgeSubscription
+  extends Promise<AsyncIterator<CategoryEdge>>,
+    Fragmentable {
+  node: <T = CategorySubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface User {
@@ -1402,135 +1684,6 @@ export interface UserNullablePromise
   }) => T;
 }
 
-export interface BatchPayload {
-  count: Long;
-}
-
-export interface BatchPayloadPromise
-  extends Promise<BatchPayload>,
-    Fragmentable {
-  count: () => Promise<Long>;
-}
-
-export interface BatchPayloadSubscription
-  extends Promise<AsyncIterator<BatchPayload>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Long>>;
-}
-
-export interface SessionSubscriptionPayload {
-  mutation: MutationType;
-  node: Session;
-  updatedFields: String[];
-  previousValues: SessionPreviousValues;
-}
-
-export interface SessionSubscriptionPayloadPromise
-  extends Promise<SessionSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = SessionPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = SessionPreviousValuesPromise>() => T;
-}
-
-export interface SessionSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<SessionSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = SessionSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = SessionPreviousValuesSubscription>() => T;
-}
-
-export interface GroupParticipant {
-  id: ID_Output;
-  name: String;
-}
-
-export interface GroupParticipantPromise
-  extends Promise<GroupParticipant>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  groupId: <T = GroupPromise>() => T;
-  userId: <T = UserPromise>() => T;
-  name: () => Promise<String>;
-}
-
-export interface GroupParticipantSubscription
-  extends Promise<AsyncIterator<GroupParticipant>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  groupId: <T = GroupSubscription>() => T;
-  userId: <T = UserSubscription>() => T;
-  name: () => Promise<AsyncIterator<String>>;
-}
-
-export interface GroupParticipantNullablePromise
-  extends Promise<GroupParticipant | null>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  groupId: <T = GroupPromise>() => T;
-  userId: <T = UserPromise>() => T;
-  name: () => Promise<String>;
-}
-
-export interface CategoryEdge {
-  node: Category;
-  cursor: String;
-}
-
-export interface CategoryEdgePromise
-  extends Promise<CategoryEdge>,
-    Fragmentable {
-  node: <T = CategoryPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface CategoryEdgeSubscription
-  extends Promise<AsyncIterator<CategoryEdge>>,
-    Fragmentable {
-  node: <T = CategorySubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface AggregateUser {
-  count: Int;
-}
-
-export interface AggregateUserPromise
-  extends Promise<AggregateUser>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateUserSubscription
-  extends Promise<AsyncIterator<AggregateUser>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface UserConnection {
-  pageInfo: PageInfo;
-  edges: UserEdge[];
-}
-
-export interface UserConnectionPromise
-  extends Promise<UserConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<UserEdge>>() => T;
-  aggregate: <T = AggregateUserPromise>() => T;
-}
-
-export interface UserConnectionSubscription
-  extends Promise<AsyncIterator<UserConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateUserSubscription>() => T;
-}
-
 export interface Category {
   id: ID_Output;
   name: String;
@@ -1584,20 +1737,21 @@ export interface CategoryNullablePromise
   }) => T;
 }
 
-export interface AggregateSession {
-  count: Int;
+export interface SessionEdge {
+  node: Session;
+  cursor: String;
 }
 
-export interface AggregateSessionPromise
-  extends Promise<AggregateSession>,
-    Fragmentable {
-  count: () => Promise<Int>;
+export interface SessionEdgePromise extends Promise<SessionEdge>, Fragmentable {
+  node: <T = SessionPromise>() => T;
+  cursor: () => Promise<String>;
 }
 
-export interface AggregateSessionSubscription
-  extends Promise<AsyncIterator<AggregateSession>>,
+export interface SessionEdgeSubscription
+  extends Promise<AsyncIterator<SessionEdge>>,
     Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
+  node: <T = SessionSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface CategorySubscriptionPayload {
@@ -1625,25 +1779,32 @@ export interface CategorySubscriptionPayloadSubscription
   previousValues: <T = CategoryPreviousValuesSubscription>() => T;
 }
 
-export interface SessionConnection {
-  pageInfo: PageInfo;
-  edges: SessionEdge[];
+export interface Session {
+  id: ID_Output;
+  email: String;
+  token: String;
 }
 
-export interface SessionConnectionPromise
-  extends Promise<SessionConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<SessionEdge>>() => T;
-  aggregate: <T = AggregateSessionPromise>() => T;
+export interface SessionPromise extends Promise<Session>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  email: () => Promise<String>;
+  token: () => Promise<String>;
 }
 
-export interface SessionConnectionSubscription
-  extends Promise<AsyncIterator<SessionConnection>>,
+export interface SessionSubscription
+  extends Promise<AsyncIterator<Session>>,
     Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<SessionEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateSessionSubscription>() => T;
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  email: () => Promise<AsyncIterator<String>>;
+  token: () => Promise<AsyncIterator<String>>;
+}
+
+export interface SessionNullablePromise
+  extends Promise<Session | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  email: () => Promise<String>;
+  token: () => Promise<String>;
 }
 
 export interface CategoryPreviousValues {
@@ -1665,20 +1826,21 @@ export interface CategoryPreviousValuesSubscription
   name: () => Promise<AsyncIterator<String>>;
 }
 
-export interface AggregateGroupParticipant {
-  count: Int;
+export interface RoomEdge {
+  node: Room;
+  cursor: String;
 }
 
-export interface AggregateGroupParticipantPromise
-  extends Promise<AggregateGroupParticipant>,
-    Fragmentable {
-  count: () => Promise<Int>;
+export interface RoomEdgePromise extends Promise<RoomEdge>, Fragmentable {
+  node: <T = RoomPromise>() => T;
+  cursor: () => Promise<String>;
 }
 
-export interface AggregateGroupParticipantSubscription
-  extends Promise<AsyncIterator<AggregateGroupParticipant>>,
+export interface RoomEdgeSubscription
+  extends Promise<AsyncIterator<RoomEdge>>,
     Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
+  node: <T = RoomSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface SessionPreviousValues {
@@ -1703,25 +1865,44 @@ export interface SessionPreviousValuesSubscription
   token: () => Promise<AsyncIterator<String>>;
 }
 
-export interface GroupParticipantConnection {
-  pageInfo: PageInfo;
-  edges: GroupParticipantEdge[];
+export interface Room {
+  id: ID_Output;
+  name: String;
+  startTime: String;
+  endTime: String;
+  standardNum: Int;
+  location?: String;
 }
 
-export interface GroupParticipantConnectionPromise
-  extends Promise<GroupParticipantConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<GroupParticipantEdge>>() => T;
-  aggregate: <T = AggregateGroupParticipantPromise>() => T;
+export interface RoomPromise extends Promise<Room>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+  startTime: () => Promise<String>;
+  endTime: () => Promise<String>;
+  standardNum: () => Promise<Int>;
+  location: () => Promise<String>;
 }
 
-export interface GroupParticipantConnectionSubscription
-  extends Promise<AsyncIterator<GroupParticipantConnection>>,
+export interface RoomSubscription
+  extends Promise<AsyncIterator<Room>>,
     Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<GroupParticipantEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateGroupParticipantSubscription>() => T;
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+  startTime: () => Promise<AsyncIterator<String>>;
+  endTime: () => Promise<AsyncIterator<String>>;
+  standardNum: () => Promise<AsyncIterator<Int>>;
+  location: () => Promise<AsyncIterator<String>>;
+}
+
+export interface RoomNullablePromise
+  extends Promise<Room | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+  startTime: () => Promise<String>;
+  endTime: () => Promise<String>;
+  standardNum: () => Promise<Int>;
+  location: () => Promise<String>;
 }
 
 export interface CategoryParticipantSubscriptionPayload {
@@ -1749,20 +1930,22 @@ export interface CategoryParticipantSubscriptionPayloadSubscription
   previousValues: <T = CategoryParticipantPreviousValuesSubscription>() => T;
 }
 
-export interface GroupEdge {
-  node: Group;
+export interface GroupParticipantEdge {
+  node: GroupParticipant;
   cursor: String;
 }
 
-export interface GroupEdgePromise extends Promise<GroupEdge>, Fragmentable {
-  node: <T = GroupPromise>() => T;
+export interface GroupParticipantEdgePromise
+  extends Promise<GroupParticipantEdge>,
+    Fragmentable {
+  node: <T = GroupParticipantPromise>() => T;
   cursor: () => Promise<String>;
 }
 
-export interface GroupEdgeSubscription
-  extends Promise<AsyncIterator<GroupEdge>>,
+export interface GroupParticipantEdgeSubscription
+  extends Promise<AsyncIterator<GroupParticipantEdge>>,
     Fragmentable {
-  node: <T = GroupSubscription>() => T;
+  node: <T = GroupParticipantSubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
@@ -1785,18 +1968,18 @@ export interface CategoryParticipantPreviousValuesSubscription
   name: () => Promise<AsyncIterator<String>>;
 }
 
-export interface AggregateCategoryParticipant {
+export interface AggregateGroup {
   count: Int;
 }
 
-export interface AggregateCategoryParticipantPromise
-  extends Promise<AggregateCategoryParticipant>,
+export interface AggregateGroupPromise
+  extends Promise<AggregateGroup>,
     Fragmentable {
   count: () => Promise<Int>;
 }
 
-export interface AggregateCategoryParticipantSubscription
-  extends Promise<AsyncIterator<AggregateCategoryParticipant>>,
+export interface AggregateGroupSubscription
+  extends Promise<AsyncIterator<AggregateGroup>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
 }
@@ -1824,21 +2007,25 @@ export interface PageInfoSubscription
   endCursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface UserEdge {
-  node: User;
-  cursor: String;
+export interface GroupConnection {
+  pageInfo: PageInfo;
+  edges: GroupEdge[];
 }
 
-export interface UserEdgePromise extends Promise<UserEdge>, Fragmentable {
-  node: <T = UserPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface UserEdgeSubscription
-  extends Promise<AsyncIterator<UserEdge>>,
+export interface GroupConnectionPromise
+  extends Promise<GroupConnection>,
     Fragmentable {
-  node: <T = UserSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<GroupEdge>>() => T;
+  aggregate: <T = AggregateGroupPromise>() => T;
+}
+
+export interface GroupConnectionSubscription
+  extends Promise<AsyncIterator<GroupConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<GroupEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateGroupSubscription>() => T;
 }
 
 export interface GroupSubscriptionPayload {
@@ -1866,21 +2053,20 @@ export interface GroupSubscriptionPayloadSubscription
   previousValues: <T = GroupPreviousValuesSubscription>() => T;
 }
 
-export interface SessionEdge {
-  node: Session;
-  cursor: String;
+export interface AggregateUser {
+  count: Int;
 }
 
-export interface SessionEdgePromise extends Promise<SessionEdge>, Fragmentable {
-  node: <T = SessionPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface SessionEdgeSubscription
-  extends Promise<AsyncIterator<SessionEdge>>,
+export interface AggregateUserPromise
+  extends Promise<AggregateUser>,
     Fragmentable {
-  node: <T = SessionSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
+  count: () => Promise<Int>;
+}
+
+export interface AggregateUserSubscription
+  extends Promise<AsyncIterator<AggregateUser>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface GroupPreviousValues {
@@ -1902,44 +2088,243 @@ export interface GroupPreviousValuesSubscription
   name: () => Promise<AsyncIterator<String>>;
 }
 
-export interface GroupParticipantEdge {
+export interface AggregateSession {
+  count: Int;
+}
+
+export interface AggregateSessionPromise
+  extends Promise<AggregateSession>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateSessionSubscription
+  extends Promise<AsyncIterator<AggregateSession>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface CategoryConnection {
+  pageInfo: PageInfo;
+  edges: CategoryEdge[];
+}
+
+export interface CategoryConnectionPromise
+  extends Promise<CategoryConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<CategoryEdge>>() => T;
+  aggregate: <T = AggregateCategoryPromise>() => T;
+}
+
+export interface CategoryConnectionSubscription
+  extends Promise<AsyncIterator<CategoryConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<CategoryEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateCategorySubscription>() => T;
+}
+
+export interface AggregateRoom {
+  count: Int;
+}
+
+export interface AggregateRoomPromise
+  extends Promise<AggregateRoom>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateRoomSubscription
+  extends Promise<AsyncIterator<AggregateRoom>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface GroupParticipantSubscriptionPayload {
+  mutation: MutationType;
   node: GroupParticipant;
+  updatedFields: String[];
+  previousValues: GroupParticipantPreviousValues;
+}
+
+export interface GroupParticipantSubscriptionPayloadPromise
+  extends Promise<GroupParticipantSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = GroupParticipantPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = GroupParticipantPreviousValuesPromise>() => T;
+}
+
+export interface GroupParticipantSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<GroupParticipantSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = GroupParticipantSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = GroupParticipantPreviousValuesSubscription>() => T;
+}
+
+export interface AggregateGroupParticipant {
+  count: Int;
+}
+
+export interface AggregateGroupParticipantPromise
+  extends Promise<AggregateGroupParticipant>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateGroupParticipantSubscription
+  extends Promise<AsyncIterator<AggregateGroupParticipant>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface GroupParticipantPreviousValues {
+  id: ID_Output;
+  name: String;
+}
+
+export interface GroupParticipantPreviousValuesPromise
+  extends Promise<GroupParticipantPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+}
+
+export interface GroupParticipantPreviousValuesSubscription
+  extends Promise<AsyncIterator<GroupParticipantPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+}
+
+export interface GroupEdge {
+  node: Group;
   cursor: String;
 }
 
-export interface GroupParticipantEdgePromise
-  extends Promise<GroupParticipantEdge>,
-    Fragmentable {
-  node: <T = GroupParticipantPromise>() => T;
+export interface GroupEdgePromise extends Promise<GroupEdge>, Fragmentable {
+  node: <T = GroupPromise>() => T;
   cursor: () => Promise<String>;
 }
 
-export interface GroupParticipantEdgeSubscription
-  extends Promise<AsyncIterator<GroupParticipantEdge>>,
+export interface GroupEdgeSubscription
+  extends Promise<AsyncIterator<GroupEdge>>,
     Fragmentable {
-  node: <T = GroupParticipantSubscription>() => T;
+  node: <T = GroupSubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface GroupConnection {
+export interface UserConnection {
   pageInfo: PageInfo;
-  edges: GroupEdge[];
+  edges: UserEdge[];
 }
 
-export interface GroupConnectionPromise
-  extends Promise<GroupConnection>,
+export interface UserConnectionPromise
+  extends Promise<UserConnection>,
     Fragmentable {
   pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<GroupEdge>>() => T;
-  aggregate: <T = AggregateGroupPromise>() => T;
+  edges: <T = FragmentableArray<UserEdge>>() => T;
+  aggregate: <T = AggregateUserPromise>() => T;
 }
 
-export interface GroupConnectionSubscription
-  extends Promise<AsyncIterator<GroupConnection>>,
+export interface UserConnectionSubscription
+  extends Promise<AsyncIterator<UserConnection>>,
     Fragmentable {
   pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<GroupEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateGroupSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateUserSubscription>() => T;
+}
+
+export interface GroupParticipant {
+  id: ID_Output;
+  name: String;
+}
+
+export interface GroupParticipantPromise
+  extends Promise<GroupParticipant>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  groupId: <T = GroupPromise>() => T;
+  userId: <T = UserPromise>() => T;
+  name: () => Promise<String>;
+}
+
+export interface GroupParticipantSubscription
+  extends Promise<AsyncIterator<GroupParticipant>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  groupId: <T = GroupSubscription>() => T;
+  userId: <T = UserSubscription>() => T;
+  name: () => Promise<AsyncIterator<String>>;
+}
+
+export interface GroupParticipantNullablePromise
+  extends Promise<GroupParticipant | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  groupId: <T = GroupPromise>() => T;
+  userId: <T = UserPromise>() => T;
+  name: () => Promise<String>;
+}
+
+export interface RoomPreviousValues {
+  id: ID_Output;
+  name: String;
+  startTime: String;
+  endTime: String;
+  standardNum: Int;
+  location?: String;
+}
+
+export interface RoomPreviousValuesPromise
+  extends Promise<RoomPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+  startTime: () => Promise<String>;
+  endTime: () => Promise<String>;
+  standardNum: () => Promise<Int>;
+  location: () => Promise<String>;
+}
+
+export interface RoomPreviousValuesSubscription
+  extends Promise<AsyncIterator<RoomPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+  startTime: () => Promise<AsyncIterator<String>>;
+  endTime: () => Promise<AsyncIterator<String>>;
+  standardNum: () => Promise<AsyncIterator<Int>>;
+  location: () => Promise<AsyncIterator<String>>;
+}
+
+export interface RoomSubscriptionPayload {
+  mutation: MutationType;
+  node: Room;
+  updatedFields: String[];
+  previousValues: RoomPreviousValues;
+}
+
+export interface RoomSubscriptionPayloadPromise
+  extends Promise<RoomSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = RoomPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = RoomPreviousValuesPromise>() => T;
+}
+
+export interface RoomSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<RoomSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = RoomSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = RoomPreviousValuesSubscription>() => T;
 }
 
 export interface Group {
@@ -1995,158 +2380,105 @@ export interface GroupNullablePromise
   }) => T;
 }
 
-export interface GroupParticipantPreviousValues {
+export interface SessionConnection {
+  pageInfo: PageInfo;
+  edges: SessionEdge[];
+}
+
+export interface SessionConnectionPromise
+  extends Promise<SessionConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<SessionEdge>>() => T;
+  aggregate: <T = AggregateSessionPromise>() => T;
+}
+
+export interface SessionConnectionSubscription
+  extends Promise<AsyncIterator<SessionConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<SessionEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateSessionSubscription>() => T;
+}
+
+export interface CategoryParticipant {
   id: ID_Output;
   name: String;
 }
 
-export interface GroupParticipantPreviousValuesPromise
-  extends Promise<GroupParticipantPreviousValues>,
+export interface CategoryParticipantPromise
+  extends Promise<CategoryParticipant>,
     Fragmentable {
   id: () => Promise<ID_Output>;
+  categoryId: <T = CategoryPromise>() => T;
+  userId: <T = UserPromise>() => T;
   name: () => Promise<String>;
 }
 
-export interface GroupParticipantPreviousValuesSubscription
-  extends Promise<AsyncIterator<GroupParticipantPreviousValues>>,
+export interface CategoryParticipantSubscription
+  extends Promise<AsyncIterator<CategoryParticipant>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  categoryId: <T = CategorySubscription>() => T;
+  userId: <T = UserSubscription>() => T;
   name: () => Promise<AsyncIterator<String>>;
 }
 
-export interface GroupParticipantSubscriptionPayload {
-  mutation: MutationType;
-  node: GroupParticipant;
-  updatedFields: String[];
-  previousValues: GroupParticipantPreviousValues;
-}
-
-export interface GroupParticipantSubscriptionPayloadPromise
-  extends Promise<GroupParticipantSubscriptionPayload>,
+export interface CategoryParticipantNullablePromise
+  extends Promise<CategoryParticipant | null>,
     Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = GroupParticipantPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = GroupParticipantPreviousValuesPromise>() => T;
+  id: () => Promise<ID_Output>;
+  categoryId: <T = CategoryPromise>() => T;
+  userId: <T = UserPromise>() => T;
+  name: () => Promise<String>;
 }
 
-export interface GroupParticipantSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<GroupParticipantSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = GroupParticipantSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = GroupParticipantPreviousValuesSubscription>() => T;
-}
-
-export interface CategoryConnection {
+export interface GroupParticipantConnection {
   pageInfo: PageInfo;
-  edges: CategoryEdge[];
+  edges: GroupParticipantEdge[];
 }
 
-export interface CategoryConnectionPromise
-  extends Promise<CategoryConnection>,
+export interface GroupParticipantConnectionPromise
+  extends Promise<GroupParticipantConnection>,
     Fragmentable {
   pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<CategoryEdge>>() => T;
-  aggregate: <T = AggregateCategoryPromise>() => T;
+  edges: <T = FragmentableArray<GroupParticipantEdge>>() => T;
+  aggregate: <T = AggregateGroupParticipantPromise>() => T;
 }
 
-export interface CategoryConnectionSubscription
-  extends Promise<AsyncIterator<CategoryConnection>>,
+export interface GroupParticipantConnectionSubscription
+  extends Promise<AsyncIterator<GroupParticipantConnection>>,
     Fragmentable {
   pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<CategoryEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateCategorySubscription>() => T;
+  edges: <T = Promise<AsyncIterator<GroupParticipantEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateGroupParticipantSubscription>() => T;
 }
 
-export interface CategoryParticipantEdge {
-  node: CategoryParticipant;
-  cursor: String;
+export interface RoomConnection {
+  pageInfo: PageInfo;
+  edges: RoomEdge[];
 }
 
-export interface CategoryParticipantEdgePromise
-  extends Promise<CategoryParticipantEdge>,
+export interface RoomConnectionPromise
+  extends Promise<RoomConnection>,
     Fragmentable {
-  node: <T = CategoryParticipantPromise>() => T;
-  cursor: () => Promise<String>;
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<RoomEdge>>() => T;
+  aggregate: <T = AggregateRoomPromise>() => T;
 }
 
-export interface CategoryParticipantEdgeSubscription
-  extends Promise<AsyncIterator<CategoryParticipantEdge>>,
+export interface RoomConnectionSubscription
+  extends Promise<AsyncIterator<RoomConnection>>,
     Fragmentable {
-  node: <T = CategoryParticipantSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<RoomEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateRoomSubscription>() => T;
 }
 
-export interface AggregateGroup {
-  count: Int;
-}
-
-export interface AggregateGroupPromise
-  extends Promise<AggregateGroup>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateGroupSubscription
-  extends Promise<AsyncIterator<AggregateGroup>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface Session {
-  id: ID_Output;
-  email: String;
-  token: String;
-}
-
-export interface SessionPromise extends Promise<Session>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  email: () => Promise<String>;
-  token: () => Promise<String>;
-}
-
-export interface SessionSubscription
-  extends Promise<AsyncIterator<Session>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  email: () => Promise<AsyncIterator<String>>;
-  token: () => Promise<AsyncIterator<String>>;
-}
-
-export interface SessionNullablePromise
-  extends Promise<Session | null>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  email: () => Promise<String>;
-  token: () => Promise<String>;
-}
-
-export interface UserSubscriptionPayload {
-  mutation: MutationType;
-  node: User;
-  updatedFields: String[];
-  previousValues: UserPreviousValues;
-}
-
-export interface UserSubscriptionPayloadPromise
-  extends Promise<UserSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = UserPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = UserPreviousValuesPromise>() => T;
-}
-
-export interface UserSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<UserSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = UserSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = UserPreviousValuesSubscription>() => T;
-}
+/*
+The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.
+*/
+export type Int = number;
 
 export type Long = string;
 
@@ -2160,11 +2492,6 @@ export type ID_Output = string;
 The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
 */
 export type String = string;
-
-/*
-The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.
-*/
-export type Int = number;
 
 /*
 The `Boolean` scalar type represents `true` or `false`.
@@ -2198,6 +2525,10 @@ export const models: Model[] = [
   },
   {
     name: "CategoryParticipant",
+    embedded: false
+  },
+  {
+    name: "Room",
     embedded: false
   }
 ];

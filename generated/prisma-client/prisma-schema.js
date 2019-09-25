@@ -19,6 +19,10 @@ type AggregateGroupParticipant {
   count: Int!
 }
 
+type AggregateRoom {
+  count: Int!
+}
+
 type AggregateSession {
   count: Int!
 }
@@ -733,6 +737,12 @@ type Mutation {
   upsertGroupParticipant(where: GroupParticipantWhereUniqueInput!, create: GroupParticipantCreateInput!, update: GroupParticipantUpdateInput!): GroupParticipant!
   deleteGroupParticipant(where: GroupParticipantWhereUniqueInput!): GroupParticipant
   deleteManyGroupParticipants(where: GroupParticipantWhereInput): BatchPayload!
+  createRoom(data: RoomCreateInput!): Room!
+  updateRoom(data: RoomUpdateInput!, where: RoomWhereUniqueInput!): Room
+  updateManyRooms(data: RoomUpdateManyMutationInput!, where: RoomWhereInput): BatchPayload!
+  upsertRoom(where: RoomWhereUniqueInput!, create: RoomCreateInput!, update: RoomUpdateInput!): Room!
+  deleteRoom(where: RoomWhereUniqueInput!): Room
+  deleteManyRooms(where: RoomWhereInput): BatchPayload!
   createSession(data: SessionCreateInput!): Session!
   updateSession(data: SessionUpdateInput!, where: SessionWhereUniqueInput!): Session
   updateManySessions(data: SessionUpdateManyMutationInput!, where: SessionWhereInput): BatchPayload!
@@ -777,6 +787,9 @@ type Query {
   groupParticipant(where: GroupParticipantWhereUniqueInput!): GroupParticipant
   groupParticipants(where: GroupParticipantWhereInput, orderBy: GroupParticipantOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GroupParticipant]!
   groupParticipantsConnection(where: GroupParticipantWhereInput, orderBy: GroupParticipantOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GroupParticipantConnection!
+  room(where: RoomWhereUniqueInput!): Room
+  rooms(where: RoomWhereInput, orderBy: RoomOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Room]!
+  roomsConnection(where: RoomWhereInput, orderBy: RoomOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RoomConnection!
   session(where: SessionWhereUniqueInput!): Session
   sessions(where: SessionWhereInput, orderBy: SessionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Session]!
   sessionsConnection(where: SessionWhereInput, orderBy: SessionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SessionConnection!
@@ -784,6 +797,181 @@ type Query {
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   node(id: ID!): Node
+}
+
+type Room {
+  id: ID!
+  name: String!
+  startTime: String!
+  endTime: String!
+  standardNum: Int!
+  location: String
+}
+
+type RoomConnection {
+  pageInfo: PageInfo!
+  edges: [RoomEdge]!
+  aggregate: AggregateRoom!
+}
+
+input RoomCreateInput {
+  id: ID
+  name: String!
+  startTime: String!
+  endTime: String!
+  standardNum: Int!
+  location: String
+}
+
+type RoomEdge {
+  node: Room!
+  cursor: String!
+}
+
+enum RoomOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  startTime_ASC
+  startTime_DESC
+  endTime_ASC
+  endTime_DESC
+  standardNum_ASC
+  standardNum_DESC
+  location_ASC
+  location_DESC
+}
+
+type RoomPreviousValues {
+  id: ID!
+  name: String!
+  startTime: String!
+  endTime: String!
+  standardNum: Int!
+  location: String
+}
+
+type RoomSubscriptionPayload {
+  mutation: MutationType!
+  node: Room
+  updatedFields: [String!]
+  previousValues: RoomPreviousValues
+}
+
+input RoomSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: RoomWhereInput
+  AND: [RoomSubscriptionWhereInput!]
+  OR: [RoomSubscriptionWhereInput!]
+  NOT: [RoomSubscriptionWhereInput!]
+}
+
+input RoomUpdateInput {
+  name: String
+  startTime: String
+  endTime: String
+  standardNum: Int
+  location: String
+}
+
+input RoomUpdateManyMutationInput {
+  name: String
+  startTime: String
+  endTime: String
+  standardNum: Int
+  location: String
+}
+
+input RoomWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  startTime: String
+  startTime_not: String
+  startTime_in: [String!]
+  startTime_not_in: [String!]
+  startTime_lt: String
+  startTime_lte: String
+  startTime_gt: String
+  startTime_gte: String
+  startTime_contains: String
+  startTime_not_contains: String
+  startTime_starts_with: String
+  startTime_not_starts_with: String
+  startTime_ends_with: String
+  startTime_not_ends_with: String
+  endTime: String
+  endTime_not: String
+  endTime_in: [String!]
+  endTime_not_in: [String!]
+  endTime_lt: String
+  endTime_lte: String
+  endTime_gt: String
+  endTime_gte: String
+  endTime_contains: String
+  endTime_not_contains: String
+  endTime_starts_with: String
+  endTime_not_starts_with: String
+  endTime_ends_with: String
+  endTime_not_ends_with: String
+  standardNum: Int
+  standardNum_not: Int
+  standardNum_in: [Int!]
+  standardNum_not_in: [Int!]
+  standardNum_lt: Int
+  standardNum_lte: Int
+  standardNum_gt: Int
+  standardNum_gte: Int
+  location: String
+  location_not: String
+  location_in: [String!]
+  location_not_in: [String!]
+  location_lt: String
+  location_lte: String
+  location_gt: String
+  location_gte: String
+  location_contains: String
+  location_not_contains: String
+  location_starts_with: String
+  location_not_starts_with: String
+  location_ends_with: String
+  location_not_ends_with: String
+  AND: [RoomWhereInput!]
+  OR: [RoomWhereInput!]
+  NOT: [RoomWhereInput!]
+}
+
+input RoomWhereUniqueInput {
+  id: ID
 }
 
 type Session {
@@ -911,6 +1099,7 @@ type Subscription {
   categoryParticipant(where: CategoryParticipantSubscriptionWhereInput): CategoryParticipantSubscriptionPayload
   group(where: GroupSubscriptionWhereInput): GroupSubscriptionPayload
   groupParticipant(where: GroupParticipantSubscriptionWhereInput): GroupParticipantSubscriptionPayload
+  room(where: RoomSubscriptionWhereInput): RoomSubscriptionPayload
   session(where: SessionSubscriptionWhereInput): SessionSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }

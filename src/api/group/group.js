@@ -1,6 +1,4 @@
 import { prisma } from "../../../generated/prisma-client";
-import dotenv from "dotenv";
-dotenv.config(); //.env 파일 로드
 
 const resolvers = {
   Query: {

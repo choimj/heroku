@@ -38,3 +38,12 @@ type CategoryParticipant {
   name: String!
 }
 
+type Room {
+  id: ID! @id
+  name: String!
+  startTime: String!
+  endTime: String!
+  standardNum: Int!
+  location: String
+}
+
