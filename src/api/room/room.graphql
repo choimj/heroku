@@ -5,6 +5,8 @@ type Room {
   endTime: String!
   minPerson: Int!
   location: String
+  groupId: Group
+  categoryId: Category
 }
 
 input RoomCreateInput {
@@ -14,6 +16,8 @@ input RoomCreateInput {
   endTime: String!
   minPerson: Int!
   location: String
+  groupId: String!
+  categoryId: String!
 }
 
 input RoomUpdateInput {

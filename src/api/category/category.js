@@ -66,17 +66,18 @@ const resolvers = {
         }
       });
     },
-    deleteCategory: async (_, args) => {
-      console.log(args);
-      return await prisma.deleteCategory({ id: args.id });
-    }
+    deleteCategory: async (_, args) =>
+      await prisma.deleteCategory({ id: args.id })
   },
   Category: {
-    async roomId(parent) {
+    async rooms(parent) {
       return await prisma.category({ id: parent.id }).rooms();
     },
     async categoryParticipants(parent) {
       return await prisma.category({ id: parent.id }).categoryParticipants();
+    },
+    async groupId(parent) {
+      return await prisma.category({ id: parent.id }).groupId();
     }
   },
   CategoryParticipant: {

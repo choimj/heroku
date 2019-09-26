@@ -1,7 +1,7 @@
 type Category {
   id: ID!
-  groupId: Group!
-  roomId: [Room!]
+  groupId: Group
+  rooms: [Room!]
   name: String!
   categoryParticipants: [CategoryParticipant!]
 }

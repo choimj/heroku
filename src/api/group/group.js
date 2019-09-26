@@ -59,8 +59,10 @@ const resolvers = {
         }
       });
     },
-    deleteGroup: async (_, args) =>
-      await prisma.deleteGroup({ id: args.data.id })
+    deleteGroup: async (_, args) => {
+      console.log(args);
+      return await prisma.deleteGroup({ id: args.id });
+    }
   },
   User: {
     async groupParticipants(parent) {

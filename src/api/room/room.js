@@ -11,13 +11,31 @@ const resolvers = {
   },
   Mutation: {
     createRoom: async (_, args) => {
-      const { name, startTime, endTime, minPerson, location } = args.data;
+      const {
+        name,
+        startTime,
+        endTime,
+        minPerson,
+        location,
+        groupId,
+        categoryId
+      } = args.data;
       return await prisma.createRoom({
         name: name,
         startTime: startTime,
         endTime: endTime,
         minPerson: minPerson,
-        location: location
+        location: location,
+        groupId: {
+          connect: {
+            id: groupId
+          }
+        },
+        categoryId: {
+          connect: {
+            id: categoryId
+          }
+        }
       });
     },
     updateRoom: async (_, args) => {
@@ -34,6 +52,14 @@ const resolvers = {
       });
     },
     deleteRoom: async (_, args) => await prisma.deleteRoom({ id: args.id })
+  },
+  Room: {
+    async groupId(parent) {
+      return await prisma.room({ id: parent.id }).groupId();
+    },
+    async categoryId(parent) {
+      return await prisma.room({ id: parent.id }).categoryId();
+    }
   }
 };
 
