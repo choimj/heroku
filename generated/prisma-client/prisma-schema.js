@@ -804,7 +804,7 @@ type Room {
   name: String!
   startTime: String!
   endTime: String!
-  standardNum: Int!
+  minPerson: Int!
   location: String
 }
 
@@ -819,7 +819,7 @@ input RoomCreateInput {
   name: String!
   startTime: String!
   endTime: String!
-  standardNum: Int!
+  minPerson: Int!
   location: String
 }
 
@@ -837,8 +837,8 @@ enum RoomOrderByInput {
   startTime_DESC
   endTime_ASC
   endTime_DESC
-  standardNum_ASC
-  standardNum_DESC
+  minPerson_ASC
+  minPerson_DESC
   location_ASC
   location_DESC
 }
@@ -848,7 +848,7 @@ type RoomPreviousValues {
   name: String!
   startTime: String!
   endTime: String!
-  standardNum: Int!
+  minPerson: Int!
   location: String
 }
 
@@ -874,7 +874,7 @@ input RoomUpdateInput {
   name: String
   startTime: String
   endTime: String
-  standardNum: Int
+  minPerson: Int
   location: String
 }
 
@@ -882,7 +882,7 @@ input RoomUpdateManyMutationInput {
   name: String
   startTime: String
   endTime: String
-  standardNum: Int
+  minPerson: Int
   location: String
 }
 
@@ -943,14 +943,14 @@ input RoomWhereInput {
   endTime_not_starts_with: String
   endTime_ends_with: String
   endTime_not_ends_with: String
-  standardNum: Int
-  standardNum_not: Int
-  standardNum_in: [Int!]
-  standardNum_not_in: [Int!]
-  standardNum_lt: Int
-  standardNum_lte: Int
-  standardNum_gt: Int
-  standardNum_gte: Int
+  minPerson: Int
+  minPerson_not: Int
+  minPerson_in: [Int!]
+  minPerson_not_in: [Int!]
+  minPerson_lt: Int
+  minPerson_lte: Int
+  minPerson_gt: Int
+  minPerson_gte: Int
   location: String
   location_not: String
   location_in: [String!]

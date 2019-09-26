@@ -3,11 +3,39 @@ type Room {
   name: String!
   startTime: String!
   endTime: String!
-  standardNum: Int!
+  minPerson: Int!
   location: String
+}
+
+input RoomCreateInput {
+  id: ID
+  name: String!
+  startTime: String!
+  endTime: String!
+  minPerson: Int!
+  location: String
+}
+
+input RoomUpdateInput {
+  id: ID!
+  name: String!
+  startTime: String!
+  endTime: String!
+  minPerson: Int!
+  location: String
+}
+
+input RoomWhereUniqueInput {
+  id: ID
 }
 
 type Query {
   rooms: [Room]!
   room(id: ID): Room
+}
+
+type Mutation {
+  createRoom(data: RoomCreateInput!): Room!
+  updateRoom(data: RoomUpdateInput!): Room!
+  deleteRoom(id: ID!): Room
 }

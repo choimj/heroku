@@ -382,8 +382,8 @@ export type RoomOrderByInput =
   | "startTime_DESC"
   | "endTime_ASC"
   | "endTime_DESC"
-  | "standardNum_ASC"
-  | "standardNum_DESC"
+  | "minPerson_ASC"
+  | "minPerson_DESC"
   | "location_ASC"
   | "location_DESC";
 
@@ -665,7 +665,7 @@ export interface RoomUpdateManyMutationInput {
   name?: Maybe<String>;
   startTime?: Maybe<String>;
   endTime?: Maybe<String>;
-  standardNum?: Maybe<Int>;
+  minPerson?: Maybe<Int>;
   location?: Maybe<String>;
 }
 
@@ -789,14 +789,14 @@ export interface RoomWhereInput {
   endTime_not_starts_with?: Maybe<String>;
   endTime_ends_with?: Maybe<String>;
   endTime_not_ends_with?: Maybe<String>;
-  standardNum?: Maybe<Int>;
-  standardNum_not?: Maybe<Int>;
-  standardNum_in?: Maybe<Int[] | Int>;
-  standardNum_not_in?: Maybe<Int[] | Int>;
-  standardNum_lt?: Maybe<Int>;
-  standardNum_lte?: Maybe<Int>;
-  standardNum_gt?: Maybe<Int>;
-  standardNum_gte?: Maybe<Int>;
+  minPerson?: Maybe<Int>;
+  minPerson_not?: Maybe<Int>;
+  minPerson_in?: Maybe<Int[] | Int>;
+  minPerson_not_in?: Maybe<Int[] | Int>;
+  minPerson_lt?: Maybe<Int>;
+  minPerson_lte?: Maybe<Int>;
+  minPerson_gt?: Maybe<Int>;
+  minPerson_gte?: Maybe<Int>;
   location?: Maybe<String>;
   location_not?: Maybe<String>;
   location_in?: Maybe<String[] | String>;
@@ -1103,7 +1103,7 @@ export interface RoomCreateInput {
   name: String;
   startTime: String;
   endTime: String;
-  standardNum: Int;
+  minPerson: Int;
   location?: Maybe<String>;
 }
 
@@ -1412,7 +1412,7 @@ export interface RoomUpdateInput {
   name?: Maybe<String>;
   startTime?: Maybe<String>;
   endTime?: Maybe<String>;
-  standardNum?: Maybe<Int>;
+  minPerson?: Maybe<Int>;
   location?: Maybe<String>;
 }
 
@@ -1870,7 +1870,7 @@ export interface Room {
   name: String;
   startTime: String;
   endTime: String;
-  standardNum: Int;
+  minPerson: Int;
   location?: String;
 }
 
@@ -1879,7 +1879,7 @@ export interface RoomPromise extends Promise<Room>, Fragmentable {
   name: () => Promise<String>;
   startTime: () => Promise<String>;
   endTime: () => Promise<String>;
-  standardNum: () => Promise<Int>;
+  minPerson: () => Promise<Int>;
   location: () => Promise<String>;
 }
 
@@ -1890,7 +1890,7 @@ export interface RoomSubscription
   name: () => Promise<AsyncIterator<String>>;
   startTime: () => Promise<AsyncIterator<String>>;
   endTime: () => Promise<AsyncIterator<String>>;
-  standardNum: () => Promise<AsyncIterator<Int>>;
+  minPerson: () => Promise<AsyncIterator<Int>>;
   location: () => Promise<AsyncIterator<String>>;
 }
 
@@ -1901,7 +1901,7 @@ export interface RoomNullablePromise
   name: () => Promise<String>;
   startTime: () => Promise<String>;
   endTime: () => Promise<String>;
-  standardNum: () => Promise<Int>;
+  minPerson: () => Promise<Int>;
   location: () => Promise<String>;
 }
 
@@ -2276,7 +2276,7 @@ export interface RoomPreviousValues {
   name: String;
   startTime: String;
   endTime: String;
-  standardNum: Int;
+  minPerson: Int;
   location?: String;
 }
 
@@ -2287,7 +2287,7 @@ export interface RoomPreviousValuesPromise
   name: () => Promise<String>;
   startTime: () => Promise<String>;
   endTime: () => Promise<String>;
-  standardNum: () => Promise<Int>;
+  minPerson: () => Promise<Int>;
   location: () => Promise<String>;
 }
 
@@ -2298,7 +2298,7 @@ export interface RoomPreviousValuesSubscription
   name: () => Promise<AsyncIterator<String>>;
   startTime: () => Promise<AsyncIterator<String>>;
   endTime: () => Promise<AsyncIterator<String>>;
-  standardNum: () => Promise<AsyncIterator<Int>>;
+  minPerson: () => Promise<AsyncIterator<Int>>;
   location: () => Promise<AsyncIterator<String>>;
 }
 
