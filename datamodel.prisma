@@ -14,6 +14,7 @@ type Session {
 
 type Group {
   id: ID! @id
+  categories: [Category] @relation(onDelete: CASCADE)
   name: String!
   groupParticipants: [GroupParticipant] @relation(onDelete: CASCADE)
 }
@@ -27,6 +28,8 @@ type GroupParticipant {
 
 type Category {
   id: ID! @id
+  groupId: Group
+  rooms: [Room] @relation(onDelete: CASCADE)
   name: String!
   categoryParticipants: [CategoryParticipant] @relation(onDelete: CASCADE)
 }
@@ -40,10 +43,32 @@ type CategoryParticipant {
 
 type Room {
   id: ID! @id
+  groupId: Group
+  categoryId: Category
   name: String!
   startTime: String!
   endTime: String!
   minPerson: Int!
   location: String
+}
+
+type Booking {
+  id: ID! @id
+  groupId: Group
+  categoryId: Category
+  date: String!
+  startTime: String!
+  endTime: String!
+  title: String!
+  department: String!
+  name: String!
+  bookingParticipants: [bookingParicipants] @relation(onDelete: CASCADE)
+}
+
+type bookingParicipants {
+  id: ID! @id
+  bookingId: Booking 
+  userId: User 
+  name: String!
 }
 

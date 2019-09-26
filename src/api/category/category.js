@@ -11,8 +11,15 @@ const resolvers = {
   },
   Mutation: {
     createCategory: async (_, args) => {
-      const { name } = args.data;
-      return await prisma.createCategory({ name: name });
+      const { name, groupId } = args.data;
+      return await prisma.createCategory({
+        name: name,
+        groupId: {
+          connect: {
+            id: groupId
+          }
+        }
+      });
     },
     createCategoryParticipant: async (_, args) => {
       const { categoryId, userId, name } = args.data;
@@ -59,10 +66,15 @@ const resolvers = {
         }
       });
     },
-    deleteCategory: async (_, args) =>
-      await prisma.deleteCategory({ id: args.data.id })
+    deleteCategory: async (_, args) => {
+      console.log(args);
+      return await prisma.deleteCategory({ id: args.id });
+    }
   },
   Category: {
+    async roomId(parent) {
+      return await prisma.category({ id: parent.id }).rooms();
+    },
     async categoryParticipants(parent) {
       return await prisma.category({ id: parent.id }).categoryParticipants();
     }

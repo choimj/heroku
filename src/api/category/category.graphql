@@ -1,5 +1,7 @@
 type Category {
   id: ID!
+  groupId: Group!
+  roomId: [Room!]
   name: String!
   categoryParticipants: [CategoryParticipant!]
 }
@@ -13,6 +15,7 @@ type CategoryParticipant {
 
 input CategoryCreateInput {
   id: ID
+  groupId: String!
   name: String!
 }
 
@@ -44,5 +47,5 @@ type Mutation {
     data: CategoryParticipantCreateInput!
   ): CategoryParticipant!
   updateCategory(data: CategoryUpdateInput!): Category!
-  deleteCategory(data: CategoryWhereUniqueInput!): Category
+  deleteCategory(id: ID!): Category
 }

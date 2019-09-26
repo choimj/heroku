@@ -3,7 +3,15 @@ module.exports = {
   // Please don't change this file manually but run `prisma generate` to update it.
   // For more information, please read the docs: https://www.prisma.io/docs/prisma-client/
 
-/* GraphQL */ `type AggregateCategory {
+/* GraphQL */ `type AggregateBooking {
+  count: Int!
+}
+
+type AggregatebookingParicipants {
+  count: Int!
+}
+
+type AggregateCategory {
   count: Int!
 }
 
@@ -35,8 +43,455 @@ type BatchPayload {
   count: Long!
 }
 
+type Booking {
+  id: ID!
+  groupId: Group
+  categoryId: Category
+  date: String!
+  startTime: String!
+  endTime: String!
+  title: String!
+  department: String!
+  name: String!
+  bookingParticipants(where: bookingParicipantsWhereInput, orderBy: bookingParicipantsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [bookingParicipants!]
+}
+
+type BookingConnection {
+  pageInfo: PageInfo!
+  edges: [BookingEdge]!
+  aggregate: AggregateBooking!
+}
+
+input BookingCreateInput {
+  id: ID
+  groupId: GroupCreateOneInput
+  categoryId: CategoryCreateOneInput
+  date: String!
+  startTime: String!
+  endTime: String!
+  title: String!
+  department: String!
+  name: String!
+  bookingParticipants: bookingParicipantsCreateManyWithoutBookingIdInput
+}
+
+input BookingCreateOneWithoutBookingParticipantsInput {
+  create: BookingCreateWithoutBookingParticipantsInput
+  connect: BookingWhereUniqueInput
+}
+
+input BookingCreateWithoutBookingParticipantsInput {
+  id: ID
+  groupId: GroupCreateOneInput
+  categoryId: CategoryCreateOneInput
+  date: String!
+  startTime: String!
+  endTime: String!
+  title: String!
+  department: String!
+  name: String!
+}
+
+type BookingEdge {
+  node: Booking!
+  cursor: String!
+}
+
+enum BookingOrderByInput {
+  id_ASC
+  id_DESC
+  date_ASC
+  date_DESC
+  startTime_ASC
+  startTime_DESC
+  endTime_ASC
+  endTime_DESC
+  title_ASC
+  title_DESC
+  department_ASC
+  department_DESC
+  name_ASC
+  name_DESC
+}
+
+type bookingParicipants {
+  id: ID!
+  bookingId: Booking
+  userId: User
+  name: String!
+}
+
+type bookingParicipantsConnection {
+  pageInfo: PageInfo!
+  edges: [bookingParicipantsEdge]!
+  aggregate: AggregatebookingParicipants!
+}
+
+input bookingParicipantsCreateInput {
+  id: ID
+  bookingId: BookingCreateOneWithoutBookingParticipantsInput
+  userId: UserCreateOneInput
+  name: String!
+}
+
+input bookingParicipantsCreateManyWithoutBookingIdInput {
+  create: [bookingParicipantsCreateWithoutBookingIdInput!]
+  connect: [bookingParicipantsWhereUniqueInput!]
+}
+
+input bookingParicipantsCreateWithoutBookingIdInput {
+  id: ID
+  userId: UserCreateOneInput
+  name: String!
+}
+
+type bookingParicipantsEdge {
+  node: bookingParicipants!
+  cursor: String!
+}
+
+enum bookingParicipantsOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+}
+
+type bookingParicipantsPreviousValues {
+  id: ID!
+  name: String!
+}
+
+input bookingParicipantsScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  AND: [bookingParicipantsScalarWhereInput!]
+  OR: [bookingParicipantsScalarWhereInput!]
+  NOT: [bookingParicipantsScalarWhereInput!]
+}
+
+type bookingParicipantsSubscriptionPayload {
+  mutation: MutationType!
+  node: bookingParicipants
+  updatedFields: [String!]
+  previousValues: bookingParicipantsPreviousValues
+}
+
+input bookingParicipantsSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: bookingParicipantsWhereInput
+  AND: [bookingParicipantsSubscriptionWhereInput!]
+  OR: [bookingParicipantsSubscriptionWhereInput!]
+  NOT: [bookingParicipantsSubscriptionWhereInput!]
+}
+
+input bookingParicipantsUpdateInput {
+  bookingId: BookingUpdateOneWithoutBookingParticipantsInput
+  userId: UserUpdateOneInput
+  name: String
+}
+
+input bookingParicipantsUpdateManyDataInput {
+  name: String
+}
+
+input bookingParicipantsUpdateManyMutationInput {
+  name: String
+}
+
+input bookingParicipantsUpdateManyWithoutBookingIdInput {
+  create: [bookingParicipantsCreateWithoutBookingIdInput!]
+  delete: [bookingParicipantsWhereUniqueInput!]
+  connect: [bookingParicipantsWhereUniqueInput!]
+  set: [bookingParicipantsWhereUniqueInput!]
+  disconnect: [bookingParicipantsWhereUniqueInput!]
+  update: [bookingParicipantsUpdateWithWhereUniqueWithoutBookingIdInput!]
+  upsert: [bookingParicipantsUpsertWithWhereUniqueWithoutBookingIdInput!]
+  deleteMany: [bookingParicipantsScalarWhereInput!]
+  updateMany: [bookingParicipantsUpdateManyWithWhereNestedInput!]
+}
+
+input bookingParicipantsUpdateManyWithWhereNestedInput {
+  where: bookingParicipantsScalarWhereInput!
+  data: bookingParicipantsUpdateManyDataInput!
+}
+
+input bookingParicipantsUpdateWithoutBookingIdDataInput {
+  userId: UserUpdateOneInput
+  name: String
+}
+
+input bookingParicipantsUpdateWithWhereUniqueWithoutBookingIdInput {
+  where: bookingParicipantsWhereUniqueInput!
+  data: bookingParicipantsUpdateWithoutBookingIdDataInput!
+}
+
+input bookingParicipantsUpsertWithWhereUniqueWithoutBookingIdInput {
+  where: bookingParicipantsWhereUniqueInput!
+  update: bookingParicipantsUpdateWithoutBookingIdDataInput!
+  create: bookingParicipantsCreateWithoutBookingIdInput!
+}
+
+input bookingParicipantsWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  bookingId: BookingWhereInput
+  userId: UserWhereInput
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  AND: [bookingParicipantsWhereInput!]
+  OR: [bookingParicipantsWhereInput!]
+  NOT: [bookingParicipantsWhereInput!]
+}
+
+input bookingParicipantsWhereUniqueInput {
+  id: ID
+}
+
+type BookingPreviousValues {
+  id: ID!
+  date: String!
+  startTime: String!
+  endTime: String!
+  title: String!
+  department: String!
+  name: String!
+}
+
+type BookingSubscriptionPayload {
+  mutation: MutationType!
+  node: Booking
+  updatedFields: [String!]
+  previousValues: BookingPreviousValues
+}
+
+input BookingSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: BookingWhereInput
+  AND: [BookingSubscriptionWhereInput!]
+  OR: [BookingSubscriptionWhereInput!]
+  NOT: [BookingSubscriptionWhereInput!]
+}
+
+input BookingUpdateInput {
+  groupId: GroupUpdateOneInput
+  categoryId: CategoryUpdateOneInput
+  date: String
+  startTime: String
+  endTime: String
+  title: String
+  department: String
+  name: String
+  bookingParticipants: bookingParicipantsUpdateManyWithoutBookingIdInput
+}
+
+input BookingUpdateManyMutationInput {
+  date: String
+  startTime: String
+  endTime: String
+  title: String
+  department: String
+  name: String
+}
+
+input BookingUpdateOneWithoutBookingParticipantsInput {
+  create: BookingCreateWithoutBookingParticipantsInput
+  update: BookingUpdateWithoutBookingParticipantsDataInput
+  upsert: BookingUpsertWithoutBookingParticipantsInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: BookingWhereUniqueInput
+}
+
+input BookingUpdateWithoutBookingParticipantsDataInput {
+  groupId: GroupUpdateOneInput
+  categoryId: CategoryUpdateOneInput
+  date: String
+  startTime: String
+  endTime: String
+  title: String
+  department: String
+  name: String
+}
+
+input BookingUpsertWithoutBookingParticipantsInput {
+  update: BookingUpdateWithoutBookingParticipantsDataInput!
+  create: BookingCreateWithoutBookingParticipantsInput!
+}
+
+input BookingWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  groupId: GroupWhereInput
+  categoryId: CategoryWhereInput
+  date: String
+  date_not: String
+  date_in: [String!]
+  date_not_in: [String!]
+  date_lt: String
+  date_lte: String
+  date_gt: String
+  date_gte: String
+  date_contains: String
+  date_not_contains: String
+  date_starts_with: String
+  date_not_starts_with: String
+  date_ends_with: String
+  date_not_ends_with: String
+  startTime: String
+  startTime_not: String
+  startTime_in: [String!]
+  startTime_not_in: [String!]
+  startTime_lt: String
+  startTime_lte: String
+  startTime_gt: String
+  startTime_gte: String
+  startTime_contains: String
+  startTime_not_contains: String
+  startTime_starts_with: String
+  startTime_not_starts_with: String
+  startTime_ends_with: String
+  startTime_not_ends_with: String
+  endTime: String
+  endTime_not: String
+  endTime_in: [String!]
+  endTime_not_in: [String!]
+  endTime_lt: String
+  endTime_lte: String
+  endTime_gt: String
+  endTime_gte: String
+  endTime_contains: String
+  endTime_not_contains: String
+  endTime_starts_with: String
+  endTime_not_starts_with: String
+  endTime_ends_with: String
+  endTime_not_ends_with: String
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
+  department: String
+  department_not: String
+  department_in: [String!]
+  department_not_in: [String!]
+  department_lt: String
+  department_lte: String
+  department_gt: String
+  department_gte: String
+  department_contains: String
+  department_not_contains: String
+  department_starts_with: String
+  department_not_starts_with: String
+  department_ends_with: String
+  department_not_ends_with: String
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  bookingParticipants_every: bookingParicipantsWhereInput
+  bookingParticipants_some: bookingParicipantsWhereInput
+  bookingParticipants_none: bookingParicipantsWhereInput
+  AND: [BookingWhereInput!]
+  OR: [BookingWhereInput!]
+  NOT: [BookingWhereInput!]
+}
+
+input BookingWhereUniqueInput {
+  id: ID
+}
+
 type Category {
   id: ID!
+  groupId: Group
+  rooms(where: RoomWhereInput, orderBy: RoomOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Room!]
   name: String!
   categoryParticipants(where: CategoryParticipantWhereInput, orderBy: CategoryParticipantOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CategoryParticipant!]
 }
@@ -49,8 +504,20 @@ type CategoryConnection {
 
 input CategoryCreateInput {
   id: ID
+  groupId: GroupCreateOneWithoutCategoriesInput
+  rooms: RoomCreateManyWithoutCategoryIdInput
   name: String!
   categoryParticipants: CategoryParticipantCreateManyWithoutCategoryIdInput
+}
+
+input CategoryCreateManyWithoutGroupIdInput {
+  create: [CategoryCreateWithoutGroupIdInput!]
+  connect: [CategoryWhereUniqueInput!]
+}
+
+input CategoryCreateOneInput {
+  create: CategoryCreateInput
+  connect: CategoryWhereUniqueInput
 }
 
 input CategoryCreateOneWithoutCategoryParticipantsInput {
@@ -58,9 +525,30 @@ input CategoryCreateOneWithoutCategoryParticipantsInput {
   connect: CategoryWhereUniqueInput
 }
 
+input CategoryCreateOneWithoutRoomsInput {
+  create: CategoryCreateWithoutRoomsInput
+  connect: CategoryWhereUniqueInput
+}
+
 input CategoryCreateWithoutCategoryParticipantsInput {
   id: ID
+  groupId: GroupCreateOneWithoutCategoriesInput
+  rooms: RoomCreateManyWithoutCategoryIdInput
   name: String!
+}
+
+input CategoryCreateWithoutGroupIdInput {
+  id: ID
+  rooms: RoomCreateManyWithoutCategoryIdInput
+  name: String!
+  categoryParticipants: CategoryParticipantCreateManyWithoutCategoryIdInput
+}
+
+input CategoryCreateWithoutRoomsInput {
+  id: ID
+  groupId: GroupCreateOneWithoutCategoriesInput
+  name: String!
+  categoryParticipants: CategoryParticipantCreateManyWithoutCategoryIdInput
 }
 
 type CategoryEdge {
@@ -267,52 +755,7 @@ type CategoryPreviousValues {
   name: String!
 }
 
-type CategorySubscriptionPayload {
-  mutation: MutationType!
-  node: Category
-  updatedFields: [String!]
-  previousValues: CategoryPreviousValues
-}
-
-input CategorySubscriptionWhereInput {
-  mutation_in: [MutationType!]
-  updatedFields_contains: String
-  updatedFields_contains_every: [String!]
-  updatedFields_contains_some: [String!]
-  node: CategoryWhereInput
-  AND: [CategorySubscriptionWhereInput!]
-  OR: [CategorySubscriptionWhereInput!]
-  NOT: [CategorySubscriptionWhereInput!]
-}
-
-input CategoryUpdateInput {
-  name: String
-  categoryParticipants: CategoryParticipantUpdateManyWithoutCategoryIdInput
-}
-
-input CategoryUpdateManyMutationInput {
-  name: String
-}
-
-input CategoryUpdateOneWithoutCategoryParticipantsInput {
-  create: CategoryCreateWithoutCategoryParticipantsInput
-  update: CategoryUpdateWithoutCategoryParticipantsDataInput
-  upsert: CategoryUpsertWithoutCategoryParticipantsInput
-  delete: Boolean
-  disconnect: Boolean
-  connect: CategoryWhereUniqueInput
-}
-
-input CategoryUpdateWithoutCategoryParticipantsDataInput {
-  name: String
-}
-
-input CategoryUpsertWithoutCategoryParticipantsInput {
-  update: CategoryUpdateWithoutCategoryParticipantsDataInput!
-  create: CategoryCreateWithoutCategoryParticipantsInput!
-}
-
-input CategoryWhereInput {
+input CategoryScalarWhereInput {
   id: ID
   id_not: ID
   id_in: [ID!]
@@ -341,6 +784,172 @@ input CategoryWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
+  AND: [CategoryScalarWhereInput!]
+  OR: [CategoryScalarWhereInput!]
+  NOT: [CategoryScalarWhereInput!]
+}
+
+type CategorySubscriptionPayload {
+  mutation: MutationType!
+  node: Category
+  updatedFields: [String!]
+  previousValues: CategoryPreviousValues
+}
+
+input CategorySubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: CategoryWhereInput
+  AND: [CategorySubscriptionWhereInput!]
+  OR: [CategorySubscriptionWhereInput!]
+  NOT: [CategorySubscriptionWhereInput!]
+}
+
+input CategoryUpdateDataInput {
+  groupId: GroupUpdateOneWithoutCategoriesInput
+  rooms: RoomUpdateManyWithoutCategoryIdInput
+  name: String
+  categoryParticipants: CategoryParticipantUpdateManyWithoutCategoryIdInput
+}
+
+input CategoryUpdateInput {
+  groupId: GroupUpdateOneWithoutCategoriesInput
+  rooms: RoomUpdateManyWithoutCategoryIdInput
+  name: String
+  categoryParticipants: CategoryParticipantUpdateManyWithoutCategoryIdInput
+}
+
+input CategoryUpdateManyDataInput {
+  name: String
+}
+
+input CategoryUpdateManyMutationInput {
+  name: String
+}
+
+input CategoryUpdateManyWithoutGroupIdInput {
+  create: [CategoryCreateWithoutGroupIdInput!]
+  delete: [CategoryWhereUniqueInput!]
+  connect: [CategoryWhereUniqueInput!]
+  set: [CategoryWhereUniqueInput!]
+  disconnect: [CategoryWhereUniqueInput!]
+  update: [CategoryUpdateWithWhereUniqueWithoutGroupIdInput!]
+  upsert: [CategoryUpsertWithWhereUniqueWithoutGroupIdInput!]
+  deleteMany: [CategoryScalarWhereInput!]
+  updateMany: [CategoryUpdateManyWithWhereNestedInput!]
+}
+
+input CategoryUpdateManyWithWhereNestedInput {
+  where: CategoryScalarWhereInput!
+  data: CategoryUpdateManyDataInput!
+}
+
+input CategoryUpdateOneInput {
+  create: CategoryCreateInput
+  update: CategoryUpdateDataInput
+  upsert: CategoryUpsertNestedInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: CategoryWhereUniqueInput
+}
+
+input CategoryUpdateOneWithoutCategoryParticipantsInput {
+  create: CategoryCreateWithoutCategoryParticipantsInput
+  update: CategoryUpdateWithoutCategoryParticipantsDataInput
+  upsert: CategoryUpsertWithoutCategoryParticipantsInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: CategoryWhereUniqueInput
+}
+
+input CategoryUpdateOneWithoutRoomsInput {
+  create: CategoryCreateWithoutRoomsInput
+  update: CategoryUpdateWithoutRoomsDataInput
+  upsert: CategoryUpsertWithoutRoomsInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: CategoryWhereUniqueInput
+}
+
+input CategoryUpdateWithoutCategoryParticipantsDataInput {
+  groupId: GroupUpdateOneWithoutCategoriesInput
+  rooms: RoomUpdateManyWithoutCategoryIdInput
+  name: String
+}
+
+input CategoryUpdateWithoutGroupIdDataInput {
+  rooms: RoomUpdateManyWithoutCategoryIdInput
+  name: String
+  categoryParticipants: CategoryParticipantUpdateManyWithoutCategoryIdInput
+}
+
+input CategoryUpdateWithoutRoomsDataInput {
+  groupId: GroupUpdateOneWithoutCategoriesInput
+  name: String
+  categoryParticipants: CategoryParticipantUpdateManyWithoutCategoryIdInput
+}
+
+input CategoryUpdateWithWhereUniqueWithoutGroupIdInput {
+  where: CategoryWhereUniqueInput!
+  data: CategoryUpdateWithoutGroupIdDataInput!
+}
+
+input CategoryUpsertNestedInput {
+  update: CategoryUpdateDataInput!
+  create: CategoryCreateInput!
+}
+
+input CategoryUpsertWithoutCategoryParticipantsInput {
+  update: CategoryUpdateWithoutCategoryParticipantsDataInput!
+  create: CategoryCreateWithoutCategoryParticipantsInput!
+}
+
+input CategoryUpsertWithoutRoomsInput {
+  update: CategoryUpdateWithoutRoomsDataInput!
+  create: CategoryCreateWithoutRoomsInput!
+}
+
+input CategoryUpsertWithWhereUniqueWithoutGroupIdInput {
+  where: CategoryWhereUniqueInput!
+  update: CategoryUpdateWithoutGroupIdDataInput!
+  create: CategoryCreateWithoutGroupIdInput!
+}
+
+input CategoryWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  groupId: GroupWhereInput
+  rooms_every: RoomWhereInput
+  rooms_some: RoomWhereInput
+  rooms_none: RoomWhereInput
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
   categoryParticipants_every: CategoryParticipantWhereInput
   categoryParticipants_some: CategoryParticipantWhereInput
   categoryParticipants_none: CategoryParticipantWhereInput
@@ -355,6 +964,7 @@ input CategoryWhereUniqueInput {
 
 type Group {
   id: ID!
+  categories(where: CategoryWhereInput, orderBy: CategoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Category!]
   name: String!
   groupParticipants(where: GroupParticipantWhereInput, orderBy: GroupParticipantOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GroupParticipant!]
 }
@@ -367,8 +977,19 @@ type GroupConnection {
 
 input GroupCreateInput {
   id: ID
+  categories: CategoryCreateManyWithoutGroupIdInput
   name: String!
   groupParticipants: GroupParticipantCreateManyWithoutGroupIdInput
+}
+
+input GroupCreateOneInput {
+  create: GroupCreateInput
+  connect: GroupWhereUniqueInput
+}
+
+input GroupCreateOneWithoutCategoriesInput {
+  create: GroupCreateWithoutCategoriesInput
+  connect: GroupWhereUniqueInput
 }
 
 input GroupCreateOneWithoutGroupParticipantsInput {
@@ -376,8 +997,15 @@ input GroupCreateOneWithoutGroupParticipantsInput {
   connect: GroupWhereUniqueInput
 }
 
+input GroupCreateWithoutCategoriesInput {
+  id: ID
+  name: String!
+  groupParticipants: GroupParticipantCreateManyWithoutGroupIdInput
+}
+
 input GroupCreateWithoutGroupParticipantsInput {
   id: ID
+  categories: CategoryCreateManyWithoutGroupIdInput
   name: String!
 }
 
@@ -642,13 +1270,38 @@ input GroupSubscriptionWhereInput {
   NOT: [GroupSubscriptionWhereInput!]
 }
 
+input GroupUpdateDataInput {
+  categories: CategoryUpdateManyWithoutGroupIdInput
+  name: String
+  groupParticipants: GroupParticipantUpdateManyWithoutGroupIdInput
+}
+
 input GroupUpdateInput {
+  categories: CategoryUpdateManyWithoutGroupIdInput
   name: String
   groupParticipants: GroupParticipantUpdateManyWithoutGroupIdInput
 }
 
 input GroupUpdateManyMutationInput {
   name: String
+}
+
+input GroupUpdateOneInput {
+  create: GroupCreateInput
+  update: GroupUpdateDataInput
+  upsert: GroupUpsertNestedInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: GroupWhereUniqueInput
+}
+
+input GroupUpdateOneWithoutCategoriesInput {
+  create: GroupCreateWithoutCategoriesInput
+  update: GroupUpdateWithoutCategoriesDataInput
+  upsert: GroupUpsertWithoutCategoriesInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: GroupWhereUniqueInput
 }
 
 input GroupUpdateOneWithoutGroupParticipantsInput {
@@ -660,8 +1313,24 @@ input GroupUpdateOneWithoutGroupParticipantsInput {
   connect: GroupWhereUniqueInput
 }
 
-input GroupUpdateWithoutGroupParticipantsDataInput {
+input GroupUpdateWithoutCategoriesDataInput {
   name: String
+  groupParticipants: GroupParticipantUpdateManyWithoutGroupIdInput
+}
+
+input GroupUpdateWithoutGroupParticipantsDataInput {
+  categories: CategoryUpdateManyWithoutGroupIdInput
+  name: String
+}
+
+input GroupUpsertNestedInput {
+  update: GroupUpdateDataInput!
+  create: GroupCreateInput!
+}
+
+input GroupUpsertWithoutCategoriesInput {
+  update: GroupUpdateWithoutCategoriesDataInput!
+  create: GroupCreateWithoutCategoriesInput!
 }
 
 input GroupUpsertWithoutGroupParticipantsInput {
@@ -684,6 +1353,9 @@ input GroupWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  categories_every: CategoryWhereInput
+  categories_some: CategoryWhereInput
+  categories_none: CategoryWhereInput
   name: String
   name_not: String
   name_in: [String!]
@@ -713,6 +1385,12 @@ input GroupWhereUniqueInput {
 scalar Long
 
 type Mutation {
+  createBooking(data: BookingCreateInput!): Booking!
+  updateBooking(data: BookingUpdateInput!, where: BookingWhereUniqueInput!): Booking
+  updateManyBookings(data: BookingUpdateManyMutationInput!, where: BookingWhereInput): BatchPayload!
+  upsertBooking(where: BookingWhereUniqueInput!, create: BookingCreateInput!, update: BookingUpdateInput!): Booking!
+  deleteBooking(where: BookingWhereUniqueInput!): Booking
+  deleteManyBookings(where: BookingWhereInput): BatchPayload!
   createCategory(data: CategoryCreateInput!): Category!
   updateCategory(data: CategoryUpdateInput!, where: CategoryWhereUniqueInput!): Category
   updateManyCategories(data: CategoryUpdateManyMutationInput!, where: CategoryWhereInput): BatchPayload!
@@ -755,6 +1433,12 @@ type Mutation {
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   deleteUser(where: UserWhereUniqueInput!): User
   deleteManyUsers(where: UserWhereInput): BatchPayload!
+  createbookingParicipants(data: bookingParicipantsCreateInput!): bookingParicipants!
+  updatebookingParicipants(data: bookingParicipantsUpdateInput!, where: bookingParicipantsWhereUniqueInput!): bookingParicipants
+  updateManybookingParicipantses(data: bookingParicipantsUpdateManyMutationInput!, where: bookingParicipantsWhereInput): BatchPayload!
+  upsertbookingParicipants(where: bookingParicipantsWhereUniqueInput!, create: bookingParicipantsCreateInput!, update: bookingParicipantsUpdateInput!): bookingParicipants!
+  deletebookingParicipants(where: bookingParicipantsWhereUniqueInput!): bookingParicipants
+  deleteManybookingParicipantses(where: bookingParicipantsWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -775,6 +1459,9 @@ type PageInfo {
 }
 
 type Query {
+  booking(where: BookingWhereUniqueInput!): Booking
+  bookings(where: BookingWhereInput, orderBy: BookingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Booking]!
+  bookingsConnection(where: BookingWhereInput, orderBy: BookingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): BookingConnection!
   category(where: CategoryWhereUniqueInput!): Category
   categories(where: CategoryWhereInput, orderBy: CategoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Category]!
   categoriesConnection(where: CategoryWhereInput, orderBy: CategoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CategoryConnection!
@@ -796,11 +1483,16 @@ type Query {
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
+  bookingParicipants(where: bookingParicipantsWhereUniqueInput!): bookingParicipants
+  bookingParicipantses(where: bookingParicipantsWhereInput, orderBy: bookingParicipantsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [bookingParicipants]!
+  bookingParicipantsesConnection(where: bookingParicipantsWhereInput, orderBy: bookingParicipantsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): bookingParicipantsConnection!
   node(id: ID!): Node
 }
 
 type Room {
   id: ID!
+  groupId: Group
+  categoryId: Category
   name: String!
   startTime: String!
   endTime: String!
@@ -816,6 +1508,23 @@ type RoomConnection {
 
 input RoomCreateInput {
   id: ID
+  groupId: GroupCreateOneInput
+  categoryId: CategoryCreateOneWithoutRoomsInput
+  name: String!
+  startTime: String!
+  endTime: String!
+  minPerson: Int!
+  location: String
+}
+
+input RoomCreateManyWithoutCategoryIdInput {
+  create: [RoomCreateWithoutCategoryIdInput!]
+  connect: [RoomWhereUniqueInput!]
+}
+
+input RoomCreateWithoutCategoryIdInput {
+  id: ID
+  groupId: GroupCreateOneInput
   name: String!
   startTime: String!
   endTime: String!
@@ -852,6 +1561,90 @@ type RoomPreviousValues {
   location: String
 }
 
+input RoomScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  startTime: String
+  startTime_not: String
+  startTime_in: [String!]
+  startTime_not_in: [String!]
+  startTime_lt: String
+  startTime_lte: String
+  startTime_gt: String
+  startTime_gte: String
+  startTime_contains: String
+  startTime_not_contains: String
+  startTime_starts_with: String
+  startTime_not_starts_with: String
+  startTime_ends_with: String
+  startTime_not_ends_with: String
+  endTime: String
+  endTime_not: String
+  endTime_in: [String!]
+  endTime_not_in: [String!]
+  endTime_lt: String
+  endTime_lte: String
+  endTime_gt: String
+  endTime_gte: String
+  endTime_contains: String
+  endTime_not_contains: String
+  endTime_starts_with: String
+  endTime_not_starts_with: String
+  endTime_ends_with: String
+  endTime_not_ends_with: String
+  minPerson: Int
+  minPerson_not: Int
+  minPerson_in: [Int!]
+  minPerson_not_in: [Int!]
+  minPerson_lt: Int
+  minPerson_lte: Int
+  minPerson_gt: Int
+  minPerson_gte: Int
+  location: String
+  location_not: String
+  location_in: [String!]
+  location_not_in: [String!]
+  location_lt: String
+  location_lte: String
+  location_gt: String
+  location_gte: String
+  location_contains: String
+  location_not_contains: String
+  location_starts_with: String
+  location_not_starts_with: String
+  location_ends_with: String
+  location_not_ends_with: String
+  AND: [RoomScalarWhereInput!]
+  OR: [RoomScalarWhereInput!]
+  NOT: [RoomScalarWhereInput!]
+}
+
 type RoomSubscriptionPayload {
   mutation: MutationType!
   node: Room
@@ -871,6 +1664,16 @@ input RoomSubscriptionWhereInput {
 }
 
 input RoomUpdateInput {
+  groupId: GroupUpdateOneInput
+  categoryId: CategoryUpdateOneWithoutRoomsInput
+  name: String
+  startTime: String
+  endTime: String
+  minPerson: Int
+  location: String
+}
+
+input RoomUpdateManyDataInput {
   name: String
   startTime: String
   endTime: String
@@ -884,6 +1687,43 @@ input RoomUpdateManyMutationInput {
   endTime: String
   minPerson: Int
   location: String
+}
+
+input RoomUpdateManyWithoutCategoryIdInput {
+  create: [RoomCreateWithoutCategoryIdInput!]
+  delete: [RoomWhereUniqueInput!]
+  connect: [RoomWhereUniqueInput!]
+  set: [RoomWhereUniqueInput!]
+  disconnect: [RoomWhereUniqueInput!]
+  update: [RoomUpdateWithWhereUniqueWithoutCategoryIdInput!]
+  upsert: [RoomUpsertWithWhereUniqueWithoutCategoryIdInput!]
+  deleteMany: [RoomScalarWhereInput!]
+  updateMany: [RoomUpdateManyWithWhereNestedInput!]
+}
+
+input RoomUpdateManyWithWhereNestedInput {
+  where: RoomScalarWhereInput!
+  data: RoomUpdateManyDataInput!
+}
+
+input RoomUpdateWithoutCategoryIdDataInput {
+  groupId: GroupUpdateOneInput
+  name: String
+  startTime: String
+  endTime: String
+  minPerson: Int
+  location: String
+}
+
+input RoomUpdateWithWhereUniqueWithoutCategoryIdInput {
+  where: RoomWhereUniqueInput!
+  data: RoomUpdateWithoutCategoryIdDataInput!
+}
+
+input RoomUpsertWithWhereUniqueWithoutCategoryIdInput {
+  where: RoomWhereUniqueInput!
+  update: RoomUpdateWithoutCategoryIdDataInput!
+  create: RoomCreateWithoutCategoryIdInput!
 }
 
 input RoomWhereInput {
@@ -901,6 +1741,8 @@ input RoomWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  groupId: GroupWhereInput
+  categoryId: CategoryWhereInput
   name: String
   name_not: String
   name_in: [String!]
@@ -1095,6 +1937,7 @@ input SessionWhereUniqueInput {
 }
 
 type Subscription {
+  booking(where: BookingSubscriptionWhereInput): BookingSubscriptionPayload
   category(where: CategorySubscriptionWhereInput): CategorySubscriptionPayload
   categoryParticipant(where: CategoryParticipantSubscriptionWhereInput): CategoryParticipantSubscriptionPayload
   group(where: GroupSubscriptionWhereInput): GroupSubscriptionPayload
@@ -1102,6 +1945,7 @@ type Subscription {
   room(where: RoomSubscriptionWhereInput): RoomSubscriptionPayload
   session(where: SessionSubscriptionWhereInput): SessionSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+  bookingParicipants(where: bookingParicipantsSubscriptionWhereInput): bookingParicipantsSubscriptionPayload
 }
 
 type User {

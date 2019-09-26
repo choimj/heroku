@@ -68,6 +68,9 @@ const resolvers = {
     }
   },
   Group: {
+    async categories(parent) {
+      return await prisma.group({ id: parent.id }).categories();
+    },
     async groupParticipants(parent) {
       return await prisma.group({ id: parent.id }).groupParticipants();
     }
