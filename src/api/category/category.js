@@ -11,12 +11,17 @@ const resolvers = {
   },
   Mutation: {
     createCategory: async (_, args) => {
-      const { name, groupId } = args.data;
+      const { name, groupId, userId } = args.data;
       return await prisma.createCategory({
         name: name,
         groupId: {
           connect: {
             id: groupId
+          }
+        },
+        createUser: {
+          connect: {
+            id: userId
           }
         }
       });

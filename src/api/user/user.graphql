@@ -4,6 +4,8 @@ type User {
   name: String!
   password: String!
   groupParticipants: [GroupParticipant!]
+  createGroups: [Group!]
+  createCategory: [Category!]
 }
 
 type Session {

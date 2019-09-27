@@ -7,6 +7,7 @@ type Room {
   location: String
   groupId: Group
   categoryId: Category
+  createUser: User
 }
 
 input RoomCreateInput {
@@ -18,6 +19,7 @@ input RoomCreateInput {
   location: String
   groupId: String!
   categoryId: String!
+  userId: String!
 }
 
 input RoomUpdateInput {

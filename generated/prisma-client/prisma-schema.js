@@ -54,6 +54,9 @@ type Booking {
   department: String!
   name: String!
   bookingParticipants(where: bookingParicipantsWhereInput, orderBy: bookingParicipantsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [bookingParicipants!]
+  createUser: User!
+  createDate: DateTime!
+  updateDate: DateTime!
 }
 
 type BookingConnection {
@@ -73,6 +76,7 @@ input BookingCreateInput {
   department: String!
   name: String!
   bookingParticipants: bookingParicipantsCreateManyWithoutBookingIdInput
+  createUser: UserCreateOneInput!
 }
 
 input BookingCreateOneWithoutBookingParticipantsInput {
@@ -90,6 +94,7 @@ input BookingCreateWithoutBookingParticipantsInput {
   title: String!
   department: String!
   name: String!
+  createUser: UserCreateOneInput!
 }
 
 type BookingEdge {
@@ -112,6 +117,10 @@ enum BookingOrderByInput {
   department_DESC
   name_ASC
   name_DESC
+  createDate_ASC
+  createDate_DESC
+  updateDate_ASC
+  updateDate_DESC
 }
 
 type bookingParicipants {
@@ -119,6 +128,8 @@ type bookingParicipants {
   bookingId: Booking
   userId: User
   name: String!
+  createDate: DateTime!
+  updateDate: DateTime!
 }
 
 type bookingParicipantsConnection {
@@ -155,11 +166,17 @@ enum bookingParicipantsOrderByInput {
   id_DESC
   name_ASC
   name_DESC
+  createDate_ASC
+  createDate_DESC
+  updateDate_ASC
+  updateDate_DESC
 }
 
 type bookingParicipantsPreviousValues {
   id: ID!
   name: String!
+  createDate: DateTime!
+  updateDate: DateTime!
 }
 
 input bookingParicipantsScalarWhereInput {
@@ -191,6 +208,22 @@ input bookingParicipantsScalarWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
+  createDate: DateTime
+  createDate_not: DateTime
+  createDate_in: [DateTime!]
+  createDate_not_in: [DateTime!]
+  createDate_lt: DateTime
+  createDate_lte: DateTime
+  createDate_gt: DateTime
+  createDate_gte: DateTime
+  updateDate: DateTime
+  updateDate_not: DateTime
+  updateDate_in: [DateTime!]
+  updateDate_not_in: [DateTime!]
+  updateDate_lt: DateTime
+  updateDate_lte: DateTime
+  updateDate_gt: DateTime
+  updateDate_gte: DateTime
   AND: [bookingParicipantsScalarWhereInput!]
   OR: [bookingParicipantsScalarWhereInput!]
   NOT: [bookingParicipantsScalarWhereInput!]
@@ -292,6 +325,22 @@ input bookingParicipantsWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
+  createDate: DateTime
+  createDate_not: DateTime
+  createDate_in: [DateTime!]
+  createDate_not_in: [DateTime!]
+  createDate_lt: DateTime
+  createDate_lte: DateTime
+  createDate_gt: DateTime
+  createDate_gte: DateTime
+  updateDate: DateTime
+  updateDate_not: DateTime
+  updateDate_in: [DateTime!]
+  updateDate_not_in: [DateTime!]
+  updateDate_lt: DateTime
+  updateDate_lte: DateTime
+  updateDate_gt: DateTime
+  updateDate_gte: DateTime
   AND: [bookingParicipantsWhereInput!]
   OR: [bookingParicipantsWhereInput!]
   NOT: [bookingParicipantsWhereInput!]
@@ -309,6 +358,8 @@ type BookingPreviousValues {
   title: String!
   department: String!
   name: String!
+  createDate: DateTime!
+  updateDate: DateTime!
 }
 
 type BookingSubscriptionPayload {
@@ -339,6 +390,7 @@ input BookingUpdateInput {
   department: String
   name: String
   bookingParticipants: bookingParicipantsUpdateManyWithoutBookingIdInput
+  createUser: UserUpdateOneRequiredInput
 }
 
 input BookingUpdateManyMutationInput {
@@ -368,6 +420,7 @@ input BookingUpdateWithoutBookingParticipantsDataInput {
   title: String
   department: String
   name: String
+  createUser: UserUpdateOneRequiredInput
 }
 
 input BookingUpsertWithoutBookingParticipantsInput {
@@ -479,6 +532,23 @@ input BookingWhereInput {
   bookingParticipants_every: bookingParicipantsWhereInput
   bookingParticipants_some: bookingParicipantsWhereInput
   bookingParticipants_none: bookingParicipantsWhereInput
+  createUser: UserWhereInput
+  createDate: DateTime
+  createDate_not: DateTime
+  createDate_in: [DateTime!]
+  createDate_not_in: [DateTime!]
+  createDate_lt: DateTime
+  createDate_lte: DateTime
+  createDate_gt: DateTime
+  createDate_gte: DateTime
+  updateDate: DateTime
+  updateDate_not: DateTime
+  updateDate_in: [DateTime!]
+  updateDate_not_in: [DateTime!]
+  updateDate_lt: DateTime
+  updateDate_lte: DateTime
+  updateDate_gt: DateTime
+  updateDate_gte: DateTime
   AND: [BookingWhereInput!]
   OR: [BookingWhereInput!]
   NOT: [BookingWhereInput!]
@@ -494,6 +564,9 @@ type Category {
   rooms(where: RoomWhereInput, orderBy: RoomOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Room!]
   name: String!
   categoryParticipants(where: CategoryParticipantWhereInput, orderBy: CategoryParticipantOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CategoryParticipant!]
+  createUser: User!
+  createDate: DateTime!
+  updateDate: DateTime!
 }
 
 type CategoryConnection {
@@ -508,6 +581,7 @@ input CategoryCreateInput {
   rooms: RoomCreateManyWithoutCategoryIdInput
   name: String!
   categoryParticipants: CategoryParticipantCreateManyWithoutCategoryIdInput
+  createUser: UserCreateOneInput!
 }
 
 input CategoryCreateManyWithoutGroupIdInput {
@@ -535,6 +609,7 @@ input CategoryCreateWithoutCategoryParticipantsInput {
   groupId: GroupCreateOneWithoutCategoriesInput
   rooms: RoomCreateManyWithoutCategoryIdInput
   name: String!
+  createUser: UserCreateOneInput!
 }
 
 input CategoryCreateWithoutGroupIdInput {
@@ -542,6 +617,7 @@ input CategoryCreateWithoutGroupIdInput {
   rooms: RoomCreateManyWithoutCategoryIdInput
   name: String!
   categoryParticipants: CategoryParticipantCreateManyWithoutCategoryIdInput
+  createUser: UserCreateOneInput!
 }
 
 input CategoryCreateWithoutRoomsInput {
@@ -549,6 +625,7 @@ input CategoryCreateWithoutRoomsInput {
   groupId: GroupCreateOneWithoutCategoriesInput
   name: String!
   categoryParticipants: CategoryParticipantCreateManyWithoutCategoryIdInput
+  createUser: UserCreateOneInput!
 }
 
 type CategoryEdge {
@@ -561,6 +638,10 @@ enum CategoryOrderByInput {
   id_DESC
   name_ASC
   name_DESC
+  createDate_ASC
+  createDate_DESC
+  updateDate_ASC
+  updateDate_DESC
 }
 
 type CategoryParticipant {
@@ -568,6 +649,8 @@ type CategoryParticipant {
   categoryId: Category
   userId: User
   name: String!
+  createDate: DateTime!
+  updateDate: DateTime!
 }
 
 type CategoryParticipantConnection {
@@ -604,11 +687,17 @@ enum CategoryParticipantOrderByInput {
   id_DESC
   name_ASC
   name_DESC
+  createDate_ASC
+  createDate_DESC
+  updateDate_ASC
+  updateDate_DESC
 }
 
 type CategoryParticipantPreviousValues {
   id: ID!
   name: String!
+  createDate: DateTime!
+  updateDate: DateTime!
 }
 
 input CategoryParticipantScalarWhereInput {
@@ -640,6 +729,22 @@ input CategoryParticipantScalarWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
+  createDate: DateTime
+  createDate_not: DateTime
+  createDate_in: [DateTime!]
+  createDate_not_in: [DateTime!]
+  createDate_lt: DateTime
+  createDate_lte: DateTime
+  createDate_gt: DateTime
+  createDate_gte: DateTime
+  updateDate: DateTime
+  updateDate_not: DateTime
+  updateDate_in: [DateTime!]
+  updateDate_not_in: [DateTime!]
+  updateDate_lt: DateTime
+  updateDate_lte: DateTime
+  updateDate_gt: DateTime
+  updateDate_gte: DateTime
   AND: [CategoryParticipantScalarWhereInput!]
   OR: [CategoryParticipantScalarWhereInput!]
   NOT: [CategoryParticipantScalarWhereInput!]
@@ -741,6 +846,22 @@ input CategoryParticipantWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
+  createDate: DateTime
+  createDate_not: DateTime
+  createDate_in: [DateTime!]
+  createDate_not_in: [DateTime!]
+  createDate_lt: DateTime
+  createDate_lte: DateTime
+  createDate_gt: DateTime
+  createDate_gte: DateTime
+  updateDate: DateTime
+  updateDate_not: DateTime
+  updateDate_in: [DateTime!]
+  updateDate_not_in: [DateTime!]
+  updateDate_lt: DateTime
+  updateDate_lte: DateTime
+  updateDate_gt: DateTime
+  updateDate_gte: DateTime
   AND: [CategoryParticipantWhereInput!]
   OR: [CategoryParticipantWhereInput!]
   NOT: [CategoryParticipantWhereInput!]
@@ -753,6 +874,8 @@ input CategoryParticipantWhereUniqueInput {
 type CategoryPreviousValues {
   id: ID!
   name: String!
+  createDate: DateTime!
+  updateDate: DateTime!
 }
 
 input CategoryScalarWhereInput {
@@ -784,6 +907,22 @@ input CategoryScalarWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
+  createDate: DateTime
+  createDate_not: DateTime
+  createDate_in: [DateTime!]
+  createDate_not_in: [DateTime!]
+  createDate_lt: DateTime
+  createDate_lte: DateTime
+  createDate_gt: DateTime
+  createDate_gte: DateTime
+  updateDate: DateTime
+  updateDate_not: DateTime
+  updateDate_in: [DateTime!]
+  updateDate_not_in: [DateTime!]
+  updateDate_lt: DateTime
+  updateDate_lte: DateTime
+  updateDate_gt: DateTime
+  updateDate_gte: DateTime
   AND: [CategoryScalarWhereInput!]
   OR: [CategoryScalarWhereInput!]
   NOT: [CategoryScalarWhereInput!]
@@ -812,6 +951,7 @@ input CategoryUpdateDataInput {
   rooms: RoomUpdateManyWithoutCategoryIdInput
   name: String
   categoryParticipants: CategoryParticipantUpdateManyWithoutCategoryIdInput
+  createUser: UserUpdateOneRequiredInput
 }
 
 input CategoryUpdateInput {
@@ -819,6 +959,7 @@ input CategoryUpdateInput {
   rooms: RoomUpdateManyWithoutCategoryIdInput
   name: String
   categoryParticipants: CategoryParticipantUpdateManyWithoutCategoryIdInput
+  createUser: UserUpdateOneRequiredInput
 }
 
 input CategoryUpdateManyDataInput {
@@ -877,18 +1018,21 @@ input CategoryUpdateWithoutCategoryParticipantsDataInput {
   groupId: GroupUpdateOneWithoutCategoriesInput
   rooms: RoomUpdateManyWithoutCategoryIdInput
   name: String
+  createUser: UserUpdateOneRequiredInput
 }
 
 input CategoryUpdateWithoutGroupIdDataInput {
   rooms: RoomUpdateManyWithoutCategoryIdInput
   name: String
   categoryParticipants: CategoryParticipantUpdateManyWithoutCategoryIdInput
+  createUser: UserUpdateOneRequiredInput
 }
 
 input CategoryUpdateWithoutRoomsDataInput {
   groupId: GroupUpdateOneWithoutCategoriesInput
   name: String
   categoryParticipants: CategoryParticipantUpdateManyWithoutCategoryIdInput
+  createUser: UserUpdateOneRequiredInput
 }
 
 input CategoryUpdateWithWhereUniqueWithoutGroupIdInput {
@@ -953,6 +1097,23 @@ input CategoryWhereInput {
   categoryParticipants_every: CategoryParticipantWhereInput
   categoryParticipants_some: CategoryParticipantWhereInput
   categoryParticipants_none: CategoryParticipantWhereInput
+  createUser: UserWhereInput
+  createDate: DateTime
+  createDate_not: DateTime
+  createDate_in: [DateTime!]
+  createDate_not_in: [DateTime!]
+  createDate_lt: DateTime
+  createDate_lte: DateTime
+  createDate_gt: DateTime
+  createDate_gte: DateTime
+  updateDate: DateTime
+  updateDate_not: DateTime
+  updateDate_in: [DateTime!]
+  updateDate_not_in: [DateTime!]
+  updateDate_lt: DateTime
+  updateDate_lte: DateTime
+  updateDate_gt: DateTime
+  updateDate_gte: DateTime
   AND: [CategoryWhereInput!]
   OR: [CategoryWhereInput!]
   NOT: [CategoryWhereInput!]
@@ -962,11 +1123,16 @@ input CategoryWhereUniqueInput {
   id: ID
 }
 
+scalar DateTime
+
 type Group {
   id: ID!
   categories(where: CategoryWhereInput, orderBy: CategoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Category!]
   name: String!
   groupParticipants(where: GroupParticipantWhereInput, orderBy: GroupParticipantOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GroupParticipant!]
+  createUser: User!
+  createDate: DateTime!
+  updateDate: DateTime!
 }
 
 type GroupConnection {
@@ -980,6 +1146,12 @@ input GroupCreateInput {
   categories: CategoryCreateManyWithoutGroupIdInput
   name: String!
   groupParticipants: GroupParticipantCreateManyWithoutGroupIdInput
+  createUser: UserCreateOneWithoutCreateGroupsInput!
+}
+
+input GroupCreateManyWithoutCreateUserInput {
+  create: [GroupCreateWithoutCreateUserInput!]
+  connect: [GroupWhereUniqueInput!]
 }
 
 input GroupCreateOneInput {
@@ -1001,12 +1173,21 @@ input GroupCreateWithoutCategoriesInput {
   id: ID
   name: String!
   groupParticipants: GroupParticipantCreateManyWithoutGroupIdInput
+  createUser: UserCreateOneWithoutCreateGroupsInput!
+}
+
+input GroupCreateWithoutCreateUserInput {
+  id: ID
+  categories: CategoryCreateManyWithoutGroupIdInput
+  name: String!
+  groupParticipants: GroupParticipantCreateManyWithoutGroupIdInput
 }
 
 input GroupCreateWithoutGroupParticipantsInput {
   id: ID
   categories: CategoryCreateManyWithoutGroupIdInput
   name: String!
+  createUser: UserCreateOneWithoutCreateGroupsInput!
 }
 
 type GroupEdge {
@@ -1019,6 +1200,10 @@ enum GroupOrderByInput {
   id_DESC
   name_ASC
   name_DESC
+  createDate_ASC
+  createDate_DESC
+  updateDate_ASC
+  updateDate_DESC
 }
 
 type GroupParticipant {
@@ -1026,6 +1211,8 @@ type GroupParticipant {
   groupId: Group
   userId: User
   name: String!
+  createDate: DateTime!
+  updateDate: DateTime!
 }
 
 type GroupParticipantConnection {
@@ -1073,11 +1260,17 @@ enum GroupParticipantOrderByInput {
   id_DESC
   name_ASC
   name_DESC
+  createDate_ASC
+  createDate_DESC
+  updateDate_ASC
+  updateDate_DESC
 }
 
 type GroupParticipantPreviousValues {
   id: ID!
   name: String!
+  createDate: DateTime!
+  updateDate: DateTime!
 }
 
 input GroupParticipantScalarWhereInput {
@@ -1109,6 +1302,22 @@ input GroupParticipantScalarWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
+  createDate: DateTime
+  createDate_not: DateTime
+  createDate_in: [DateTime!]
+  createDate_not_in: [DateTime!]
+  createDate_lt: DateTime
+  createDate_lte: DateTime
+  createDate_gt: DateTime
+  createDate_gte: DateTime
+  updateDate: DateTime
+  updateDate_not: DateTime
+  updateDate_in: [DateTime!]
+  updateDate_not_in: [DateTime!]
+  updateDate_lt: DateTime
+  updateDate_lte: DateTime
+  updateDate_gt: DateTime
+  updateDate_gte: DateTime
   AND: [GroupParticipantScalarWhereInput!]
   OR: [GroupParticipantScalarWhereInput!]
   NOT: [GroupParticipantScalarWhereInput!]
@@ -1238,6 +1447,22 @@ input GroupParticipantWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
+  createDate: DateTime
+  createDate_not: DateTime
+  createDate_in: [DateTime!]
+  createDate_not_in: [DateTime!]
+  createDate_lt: DateTime
+  createDate_lte: DateTime
+  createDate_gt: DateTime
+  createDate_gte: DateTime
+  updateDate: DateTime
+  updateDate_not: DateTime
+  updateDate_in: [DateTime!]
+  updateDate_not_in: [DateTime!]
+  updateDate_lt: DateTime
+  updateDate_lte: DateTime
+  updateDate_gt: DateTime
+  updateDate_gte: DateTime
   AND: [GroupParticipantWhereInput!]
   OR: [GroupParticipantWhereInput!]
   NOT: [GroupParticipantWhereInput!]
@@ -1250,6 +1475,58 @@ input GroupParticipantWhereUniqueInput {
 type GroupPreviousValues {
   id: ID!
   name: String!
+  createDate: DateTime!
+  updateDate: DateTime!
+}
+
+input GroupScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  createDate: DateTime
+  createDate_not: DateTime
+  createDate_in: [DateTime!]
+  createDate_not_in: [DateTime!]
+  createDate_lt: DateTime
+  createDate_lte: DateTime
+  createDate_gt: DateTime
+  createDate_gte: DateTime
+  updateDate: DateTime
+  updateDate_not: DateTime
+  updateDate_in: [DateTime!]
+  updateDate_not_in: [DateTime!]
+  updateDate_lt: DateTime
+  updateDate_lte: DateTime
+  updateDate_gt: DateTime
+  updateDate_gte: DateTime
+  AND: [GroupScalarWhereInput!]
+  OR: [GroupScalarWhereInput!]
+  NOT: [GroupScalarWhereInput!]
 }
 
 type GroupSubscriptionPayload {
@@ -1274,16 +1551,39 @@ input GroupUpdateDataInput {
   categories: CategoryUpdateManyWithoutGroupIdInput
   name: String
   groupParticipants: GroupParticipantUpdateManyWithoutGroupIdInput
+  createUser: UserUpdateOneRequiredWithoutCreateGroupsInput
 }
 
 input GroupUpdateInput {
   categories: CategoryUpdateManyWithoutGroupIdInput
   name: String
   groupParticipants: GroupParticipantUpdateManyWithoutGroupIdInput
+  createUser: UserUpdateOneRequiredWithoutCreateGroupsInput
+}
+
+input GroupUpdateManyDataInput {
+  name: String
 }
 
 input GroupUpdateManyMutationInput {
   name: String
+}
+
+input GroupUpdateManyWithoutCreateUserInput {
+  create: [GroupCreateWithoutCreateUserInput!]
+  delete: [GroupWhereUniqueInput!]
+  connect: [GroupWhereUniqueInput!]
+  set: [GroupWhereUniqueInput!]
+  disconnect: [GroupWhereUniqueInput!]
+  update: [GroupUpdateWithWhereUniqueWithoutCreateUserInput!]
+  upsert: [GroupUpsertWithWhereUniqueWithoutCreateUserInput!]
+  deleteMany: [GroupScalarWhereInput!]
+  updateMany: [GroupUpdateManyWithWhereNestedInput!]
+}
+
+input GroupUpdateManyWithWhereNestedInput {
+  where: GroupScalarWhereInput!
+  data: GroupUpdateManyDataInput!
 }
 
 input GroupUpdateOneInput {
@@ -1316,11 +1616,24 @@ input GroupUpdateOneWithoutGroupParticipantsInput {
 input GroupUpdateWithoutCategoriesDataInput {
   name: String
   groupParticipants: GroupParticipantUpdateManyWithoutGroupIdInput
+  createUser: UserUpdateOneRequiredWithoutCreateGroupsInput
+}
+
+input GroupUpdateWithoutCreateUserDataInput {
+  categories: CategoryUpdateManyWithoutGroupIdInput
+  name: String
+  groupParticipants: GroupParticipantUpdateManyWithoutGroupIdInput
 }
 
 input GroupUpdateWithoutGroupParticipantsDataInput {
   categories: CategoryUpdateManyWithoutGroupIdInput
   name: String
+  createUser: UserUpdateOneRequiredWithoutCreateGroupsInput
+}
+
+input GroupUpdateWithWhereUniqueWithoutCreateUserInput {
+  where: GroupWhereUniqueInput!
+  data: GroupUpdateWithoutCreateUserDataInput!
 }
 
 input GroupUpsertNestedInput {
@@ -1336,6 +1649,12 @@ input GroupUpsertWithoutCategoriesInput {
 input GroupUpsertWithoutGroupParticipantsInput {
   update: GroupUpdateWithoutGroupParticipantsDataInput!
   create: GroupCreateWithoutGroupParticipantsInput!
+}
+
+input GroupUpsertWithWhereUniqueWithoutCreateUserInput {
+  where: GroupWhereUniqueInput!
+  update: GroupUpdateWithoutCreateUserDataInput!
+  create: GroupCreateWithoutCreateUserInput!
 }
 
 input GroupWhereInput {
@@ -1373,6 +1692,23 @@ input GroupWhereInput {
   groupParticipants_every: GroupParticipantWhereInput
   groupParticipants_some: GroupParticipantWhereInput
   groupParticipants_none: GroupParticipantWhereInput
+  createUser: UserWhereInput
+  createDate: DateTime
+  createDate_not: DateTime
+  createDate_in: [DateTime!]
+  createDate_not_in: [DateTime!]
+  createDate_lt: DateTime
+  createDate_lte: DateTime
+  createDate_gt: DateTime
+  createDate_gte: DateTime
+  updateDate: DateTime
+  updateDate_not: DateTime
+  updateDate_in: [DateTime!]
+  updateDate_not_in: [DateTime!]
+  updateDate_lt: DateTime
+  updateDate_lte: DateTime
+  updateDate_gt: DateTime
+  updateDate_gte: DateTime
   AND: [GroupWhereInput!]
   OR: [GroupWhereInput!]
   NOT: [GroupWhereInput!]
@@ -1498,6 +1834,9 @@ type Room {
   endTime: String!
   minPerson: Int!
   location: String
+  createUser: User!
+  createDate: DateTime!
+  updateDate: DateTime!
 }
 
 type RoomConnection {
@@ -1515,6 +1854,7 @@ input RoomCreateInput {
   endTime: String!
   minPerson: Int!
   location: String
+  createUser: UserCreateOneInput!
 }
 
 input RoomCreateManyWithoutCategoryIdInput {
@@ -1530,6 +1870,7 @@ input RoomCreateWithoutCategoryIdInput {
   endTime: String!
   minPerson: Int!
   location: String
+  createUser: UserCreateOneInput!
 }
 
 type RoomEdge {
@@ -1550,6 +1891,10 @@ enum RoomOrderByInput {
   minPerson_DESC
   location_ASC
   location_DESC
+  createDate_ASC
+  createDate_DESC
+  updateDate_ASC
+  updateDate_DESC
 }
 
 type RoomPreviousValues {
@@ -1559,6 +1904,8 @@ type RoomPreviousValues {
   endTime: String!
   minPerson: Int!
   location: String
+  createDate: DateTime!
+  updateDate: DateTime!
 }
 
 input RoomScalarWhereInput {
@@ -1640,6 +1987,22 @@ input RoomScalarWhereInput {
   location_not_starts_with: String
   location_ends_with: String
   location_not_ends_with: String
+  createDate: DateTime
+  createDate_not: DateTime
+  createDate_in: [DateTime!]
+  createDate_not_in: [DateTime!]
+  createDate_lt: DateTime
+  createDate_lte: DateTime
+  createDate_gt: DateTime
+  createDate_gte: DateTime
+  updateDate: DateTime
+  updateDate_not: DateTime
+  updateDate_in: [DateTime!]
+  updateDate_not_in: [DateTime!]
+  updateDate_lt: DateTime
+  updateDate_lte: DateTime
+  updateDate_gt: DateTime
+  updateDate_gte: DateTime
   AND: [RoomScalarWhereInput!]
   OR: [RoomScalarWhereInput!]
   NOT: [RoomScalarWhereInput!]
@@ -1671,6 +2034,7 @@ input RoomUpdateInput {
   endTime: String
   minPerson: Int
   location: String
+  createUser: UserUpdateOneRequiredInput
 }
 
 input RoomUpdateManyDataInput {
@@ -1713,6 +2077,7 @@ input RoomUpdateWithoutCategoryIdDataInput {
   endTime: String
   minPerson: Int
   location: String
+  createUser: UserUpdateOneRequiredInput
 }
 
 input RoomUpdateWithWhereUniqueWithoutCategoryIdInput {
@@ -1807,6 +2172,23 @@ input RoomWhereInput {
   location_not_starts_with: String
   location_ends_with: String
   location_not_ends_with: String
+  createUser: UserWhereInput
+  createDate: DateTime
+  createDate_not: DateTime
+  createDate_in: [DateTime!]
+  createDate_not_in: [DateTime!]
+  createDate_lt: DateTime
+  createDate_lte: DateTime
+  createDate_gt: DateTime
+  createDate_gte: DateTime
+  updateDate: DateTime
+  updateDate_not: DateTime
+  updateDate_in: [DateTime!]
+  updateDate_not_in: [DateTime!]
+  updateDate_lt: DateTime
+  updateDate_lte: DateTime
+  updateDate_gt: DateTime
+  updateDate_gte: DateTime
   AND: [RoomWhereInput!]
   OR: [RoomWhereInput!]
   NOT: [RoomWhereInput!]
@@ -1954,6 +2336,7 @@ type User {
   name: String!
   password: String!
   groups(where: GroupParticipantWhereInput, orderBy: GroupParticipantOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GroupParticipant!]
+  createGroups(where: GroupWhereInput, orderBy: GroupOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Group!]
 }
 
 type UserConnection {
@@ -1968,10 +2351,16 @@ input UserCreateInput {
   name: String!
   password: String!
   groups: GroupParticipantCreateManyWithoutUserIdInput
+  createGroups: GroupCreateManyWithoutCreateUserInput
 }
 
 input UserCreateOneInput {
   create: UserCreateInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutCreateGroupsInput {
+  create: UserCreateWithoutCreateGroupsInput
   connect: UserWhereUniqueInput
 }
 
@@ -1980,11 +2369,20 @@ input UserCreateOneWithoutGroupsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateWithoutCreateGroupsInput {
+  id: ID
+  email: String!
+  name: String!
+  password: String!
+  groups: GroupParticipantCreateManyWithoutUserIdInput
+}
+
 input UserCreateWithoutGroupsInput {
   id: ID
   email: String!
   name: String!
   password: String!
+  createGroups: GroupCreateManyWithoutCreateUserInput
 }
 
 type UserEdge {
@@ -2033,6 +2431,7 @@ input UserUpdateDataInput {
   name: String
   password: String
   groups: GroupParticipantUpdateManyWithoutUserIdInput
+  createGroups: GroupUpdateManyWithoutCreateUserInput
 }
 
 input UserUpdateInput {
@@ -2040,6 +2439,7 @@ input UserUpdateInput {
   name: String
   password: String
   groups: GroupParticipantUpdateManyWithoutUserIdInput
+  createGroups: GroupUpdateManyWithoutCreateUserInput
 }
 
 input UserUpdateManyMutationInput {
@@ -2057,6 +2457,20 @@ input UserUpdateOneInput {
   connect: UserWhereUniqueInput
 }
 
+input UserUpdateOneRequiredInput {
+  create: UserCreateInput
+  update: UserUpdateDataInput
+  upsert: UserUpsertNestedInput
+  connect: UserWhereUniqueInput
+}
+
+input UserUpdateOneRequiredWithoutCreateGroupsInput {
+  create: UserCreateWithoutCreateGroupsInput
+  update: UserUpdateWithoutCreateGroupsDataInput
+  upsert: UserUpsertWithoutCreateGroupsInput
+  connect: UserWhereUniqueInput
+}
+
 input UserUpdateOneWithoutGroupsInput {
   create: UserCreateWithoutGroupsInput
   update: UserUpdateWithoutGroupsDataInput
@@ -2066,15 +2480,28 @@ input UserUpdateOneWithoutGroupsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserUpdateWithoutCreateGroupsDataInput {
+  email: String
+  name: String
+  password: String
+  groups: GroupParticipantUpdateManyWithoutUserIdInput
+}
+
 input UserUpdateWithoutGroupsDataInput {
   email: String
   name: String
   password: String
+  createGroups: GroupUpdateManyWithoutCreateUserInput
 }
 
 input UserUpsertNestedInput {
   update: UserUpdateDataInput!
   create: UserCreateInput!
+}
+
+input UserUpsertWithoutCreateGroupsInput {
+  update: UserUpdateWithoutCreateGroupsDataInput!
+  create: UserCreateWithoutCreateGroupsInput!
 }
 
 input UserUpsertWithoutGroupsInput {
@@ -2142,6 +2569,9 @@ input UserWhereInput {
   groups_every: GroupParticipantWhereInput
   groups_some: GroupParticipantWhereInput
   groups_none: GroupParticipantWhereInput
+  createGroups_every: GroupWhereInput
+  createGroups_some: GroupWhereInput
+  createGroups_none: GroupWhereInput
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]

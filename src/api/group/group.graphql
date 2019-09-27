@@ -3,6 +3,7 @@ type Group {
   name: String
   categories: [Category!]
   groupParticipants: [GroupParticipant!]
+  createUser: User
 }
 
 type GroupParticipant {
@@ -15,6 +16,7 @@ type GroupParticipant {
 input GroupCreateInput {
   id: ID
   name: String!
+  userId: String!
 }
 
 input GroupUpdateInput {

@@ -4,6 +4,7 @@ type User {
   name: String!
   password: String!
   groups: [GroupParticipant] @relation(onDelete: CASCADE)
+  createGroups: [Group]
 }
 
 type Session {
@@ -17,6 +18,9 @@ type Group {
   categories: [Category] @relation(onDelete: CASCADE)
   name: String!
   groupParticipants: [GroupParticipant] @relation(onDelete: CASCADE)
+  createUser: User!
+  createDate: DateTime! @createdAt
+  updateDate: DateTime! @updatedAt
 }
 
 type GroupParticipant {
@@ -24,6 +28,8 @@ type GroupParticipant {
   groupId: Group 
   userId: User 
   name: String!
+  createDate: DateTime! @createdAt
+  updateDate: DateTime! @updatedAt
 }
 
 type Category {
@@ -32,6 +38,9 @@ type Category {
   rooms: [Room] @relation(onDelete: CASCADE)
   name: String!
   categoryParticipants: [CategoryParticipant] @relation(onDelete: CASCADE)
+  createUser: User!  
+  createDate: DateTime! @createdAt
+  updateDate: DateTime! @updatedAt
 }
 
 type CategoryParticipant {
@@ -39,6 +48,8 @@ type CategoryParticipant {
   categoryId: Category 
   userId: User 
   name: String!
+  createDate: DateTime! @createdAt
+  updateDate: DateTime! @updatedAt
 }
 
 type Room {
@@ -50,6 +61,9 @@ type Room {
   endTime: String!
   minPerson: Int!
   location: String
+  createUser: User!  
+  createDate: DateTime! @createdAt
+  updateDate: DateTime! @updatedAt
 }
 
 type Booking {
@@ -63,6 +77,9 @@ type Booking {
   department: String!
   name: String!
   bookingParticipants: [bookingParicipants] @relation(onDelete: CASCADE)
+  createUser: User!  
+  createDate: DateTime! @createdAt
+  updateDate: DateTime! @updatedAt
 }
 
 type bookingParicipants {
@@ -70,5 +87,7 @@ type bookingParicipants {
   bookingId: Booking 
   userId: User 
   name: String!
+  createDate: DateTime! @createdAt
+  updateDate: DateTime! @updatedAt
 }
 

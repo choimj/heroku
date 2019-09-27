@@ -57,6 +57,11 @@ const resolvers = {
 
       return session;
     }
+  },
+  User: {
+    async createGroups(parent) {
+      return await prisma.user({ id: parent.id }).createGroups();
+    }
   }
 };
 

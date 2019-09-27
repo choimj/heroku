@@ -12,8 +12,15 @@ const resolvers = {
   },
   Mutation: {
     createGroup: async (_, args) => {
-      const { name } = args.data;
-      return await prisma.createGroup({ name: name });
+      const { name, userId } = args.data;
+      return await prisma.createGroup({
+        name: name,
+        createUser: {
+          connect: {
+            id: userId
+          }
+        }
+      });
     },
     createGroupParticipant: async (_, args) => {
       const { groupId, userId, name } = args.data;
@@ -59,10 +66,7 @@ const resolvers = {
         }
       });
     },
-    deleteGroup: async (_, args) => {
-      console.log(args);
-      return await prisma.deleteGroup({ id: args.id });
-    }
+    deleteGroup: async (_, args) => await prisma.deleteGroup({ id: args.id })
   },
   User: {
     async groupParticipants(parent) {
@@ -75,6 +79,9 @@ const resolvers = {
     },
     async groupParticipants(parent) {
       return await prisma.group({ id: parent.id }).groupParticipants();
+    },
+    async createUser(parent) {
+      return await prisma.group({ id: parent.id }).createUser();
     }
   },
   GroupParticipant: {

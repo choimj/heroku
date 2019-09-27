@@ -18,7 +18,8 @@ const resolvers = {
         minPerson,
         location,
         groupId,
-        categoryId
+        categoryId,
+        userId
       } = args.data;
       return await prisma.createRoom({
         name: name,
@@ -34,6 +35,11 @@ const resolvers = {
         categoryId: {
           connect: {
             id: categoryId
+          }
+        },
+        createUser: {
+          connect: {
+            id: userId
           }
         }
       });

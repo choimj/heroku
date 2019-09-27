@@ -12,5 +12,8 @@ const opts = {
 export default new JwtStrategy.Strategy(opts, async (jwt_payload, done) => {
   const { email } = jwt_payload;
 
-  return done(null, { flag: true, user: { email: email } });
+  const user = await prisma.user({ email: email });
+  // console.log(user);
+
+  return done(null, user);
 });

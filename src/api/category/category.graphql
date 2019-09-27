@@ -4,6 +4,7 @@ type Category {
   rooms: [Room!]
   name: String!
   categoryParticipants: [CategoryParticipant!]
+  createUser: User
 }
 
 type CategoryParticipant {
@@ -17,6 +18,7 @@ input CategoryCreateInput {
   id: ID
   groupId: String!
   name: String!
+  userId: String!
 }
 
 input CategoryParticipantCreateInput {

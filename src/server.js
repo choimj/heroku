@@ -12,7 +12,10 @@ dotenv.config(); //.env 파일 로드
 const logger = require("morgan");
 
 const PORT = process.env.PORT || 5000;
-const server = new GraphQLServer({ schema });
+const server = new GraphQLServer({
+  schema,
+  context: ({ request }) => ({ request })
+});
 const jwtSecret = process.env.JWT_SECRET;
 
 passport.use(JwtStrategy);
