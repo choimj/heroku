@@ -1,0 +1,25 @@
+type Booking {
+  id: ID!
+  groupId: Group
+  categoryId: Category
+  date: String!
+  startTime: String!
+  endTime: String!
+  title: String!
+  department: String!
+  name: String!
+  bookingParticipants: [bookingParicipants!]
+  createUser: User!
+}
+
+type bookingParicipants {
+  id: ID!
+  bookingId: Booking
+  userId: User
+  name: String!
+}
+
+type Query {
+  bookings: [Booking]!
+  booking(id: ID): Booking
+}
