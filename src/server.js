@@ -73,7 +73,9 @@ server.express.get(
     }
   }
 );
-
+/**
+ * jwt Token 발급 함수
+ */
 server.express.post("/auth/jwt", async (req, res) => {
   const { email } = req.body;
   const opts = {
@@ -85,6 +87,9 @@ server.express.post("/auth/jwt", async (req, res) => {
     jwtToken: token
   });
 });
+/**
+ * jwt Token 발급 후 서버에 요청 시 유효성 체크 함수
+ */
 server.express.post(
   "/auth/jwt/check",
   passport.authenticate("jwt", {
