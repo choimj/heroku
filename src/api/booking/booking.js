@@ -112,7 +112,7 @@ const resolvers = {
       const bookings = await prisma.bookings({
         where
       });
-      console.log(bookings);
+      // console.log(bookings);
       if (bookings.length > 0) {
         throw Error("입력하신 시간대에 이미 예약이 존재합니다.");
       }
