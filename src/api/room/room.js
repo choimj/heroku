@@ -65,6 +65,9 @@ const resolvers = {
     },
     async categoryId(parent) {
       return await prisma.room({ id: parent.id }).categoryId();
+    },
+    async bookings(parent) {
+      return await prisma.room({ id: parent.id }).bookings();
     }
   }
 };

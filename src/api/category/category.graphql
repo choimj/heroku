@@ -23,8 +23,8 @@ input CategoryCreateInput {
 
 input CategoryParticipantCreateInput {
   id: ID
-  categoryId: String
-  userId: String
+  categoryId: String!
+  userId: String!
   name: String!
 }
 

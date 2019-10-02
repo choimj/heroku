@@ -29,8 +29,8 @@ input GroupWhereUniqueInput {
 }
 input GroupParticipantCreateInput {
   id: ID
-  groupId: String
-  userId: String
+  groupId: String!
+  userId: String!
   name: String!
 }
 

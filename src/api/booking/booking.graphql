@@ -2,24 +2,102 @@ type Booking {
   id: ID!
   groupId: Group
   categoryId: Category
+  roomId: Room
   date: String!
   startTime: String!
   endTime: String!
   title: String!
   department: String!
   name: String!
-  bookingParticipants: [bookingParicipants!]
+  bookingParticipants: [BookingParticipant!]
   createUser: User!
 }
 
-type bookingParicipants {
+type BookingParticipant {
   id: ID!
   bookingId: Booking
   userId: User
   name: String!
 }
 
+input BookingCreateInput {
+  id: ID
+  groupId: String!
+  categoryId: String!
+  roomId: String!
+  date: String!
+  startTime: String!
+  endTime: String!
+  title: String!
+  department: String!
+  name: String!
+  userId: String!
+}
+
+input BookingParticipantCreateInput {
+  id: ID
+  bookingId: String!
+  userId: String!
+  name: String!
+}
+
+input BookingUpdateInput {
+  id: ID!
+  date: String!
+  startTime: String!
+  endTime: String!
+  title: String!
+  department: String!
+  name: String!
+  bookingParticipants: [BookingParticipantCreateInput!]
+}
+
+input BookingFilterInput {
+  fRoomId: BookingStringFilterInput
+  fDate: BookingStringFilterInput
+  fStartTime: BookingStringFilterInput
+  fEndTime: BookingStringFilterInput
+}
+
+input BookingStringFilterInput {
+  contains: String
+  time: String
+}
+
+# input BookingStringFilterInput {
+#   lte: String
+#   lt: String
+#   gte: String
+#   gt: String
+#   contains: String
+#   notContains: String
+#   between: [String]
+#   beginWith: String
+# }
+
 type Query {
   bookings: [Booking]!
   booking(id: ID): Booking
+  filterTest(filter: BookingFilterInput): [Booking]
+}
+
+type ReturnBooking {
+  booking: Booking
+  flag: Boolean!
+}
+
+type Mutation {
+  createBooking(
+    filter: BookingFilterInput
+    data: BookingCreateInput!
+  ): ReturnBooking!
+  createBookingParticipant(
+    data: BookingParticipantCreateInput!
+  ): BookingParticipant!
+  updateBooking(data: BookingUpdateInput!): Booking
+  deleteBooking(id: ID!): Booking
+  duplicatedCheckCreateBooking(
+    filter: BookingFilterInput
+    data: BookingCreateInput!
+  ): ReturnBooking
 }

@@ -8,6 +8,7 @@ type Room {
   groupId: Group
   categoryId: Category
   createUser: User
+  bookings: [Booking!]
 }
 
 input RoomCreateInput {

@@ -37,7 +37,7 @@ var models = [
     embedded: false
   },
   {
-    name: "bookingParicipants",
+    name: "BookingParicipant",
     embedded: false
   }
 ];

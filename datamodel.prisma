@@ -56,6 +56,7 @@ type Room {
   id: ID! @id
   groupId: Group
   categoryId: Category
+  bookings: [Booking] @relation(onDelete: CASCADE)
   name: String!
   startTime: String!
   endTime: String!
@@ -70,19 +71,20 @@ type Booking {
   id: ID! @id
   groupId: Group
   categoryId: Category
+  roomId: Room
   date: String!
   startTime: String!
   endTime: String!
   title: String!
   department: String!
   name: String!
-  bookingParticipants: [bookingParicipants] @relation(onDelete: CASCADE)
+  bookingParticipants: [BookingParicipant] @relation(onDelete: CASCADE)
   createUser: User!  
   createDate: DateTime! @createdAt
   updateDate: DateTime! @updatedAt
 }
 
-type bookingParicipants {
+type BookingParicipant {
   id: ID! @id
   bookingId: Booking 
   userId: User 
