@@ -6,7 +6,10 @@ dotenv.config(); //.env 파일 로드
 const resolvers = {
   Query: {
     users: async () => await prisma.users(),
-    user: async (_, args) => await prisma.user({ email: args.email })
+    user: async (_, args) => {
+      const { id, email } = args;
+      return await prisma.user({ id: id, email: email });
+    }
   },
   Mutation: {
     createUser: async (_, args) => {
@@ -61,6 +64,44 @@ const resolvers = {
   User: {
     async createGroups(parent) {
       return await prisma.user({ id: parent.id }).createGroups();
+    },
+    async prevBookings(parent) {
+      const curDate = new Date();
+      const year = curDate.getFullYear();
+      const month =
+        curDate.getMonth() + 1 < 10
+          ? "0" + curDate.getMonth() + 1
+          : curDate.getMonth() + 1;
+      const date =
+        curDate.getDate() < 10 ? "0" + curDate.getDate() : curDate.getDate();
+      // console.log(year + "-" + month + "-" + date);
+
+      const prev = await prisma.user({ id: parent.id }).bookings({
+        where: {
+          AND: [{ date_lt: year + "-" + month + "-" + date }]
+        }
+      });
+      return prev;
+    },
+    async nextBookings(parent) {
+      const curDate = new Date();
+      const year = curDate.getFullYear();
+      const month =
+        curDate.getMonth() + 1 < 10
+          ? "0" + curDate.getMonth() + 1
+          : curDate.getMonth() + 1;
+      const date =
+        curDate.getDate() < 10 ? "0" + curDate.getDate() : curDate.getDate();
+
+      const next = await prisma.user({ id: parent.id }).bookings({
+        where: {
+          AND: [{ date_gte: year + "-" + month + "-" + date }]
+        }
+      });
+      return next;
+    },
+    async allBookings(parent) {
+      return await prisma.user({ id: parent.id }).bookings({});
     }
   }
 };

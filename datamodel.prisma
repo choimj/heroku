@@ -5,6 +5,7 @@ type User {
   password: String!
   groups: [GroupParticipant] @relation(onDelete: CASCADE)
   createGroups: [Group]
+  bookings: [Booking]
 }
 
 type Session {

@@ -6,6 +6,9 @@ type User {
   groupParticipants: [GroupParticipant!]
   createGroups: [Group!]
   createCategory: [Category!]
+  prevBookings: [Booking!]
+  nextBookings: [Booking!]
+  allBookings: [Booking!]
 }
 
 type Session {
@@ -24,7 +27,7 @@ type ReturnUserObj {
 
 type Query {
   users: [User]!
-  user(id: ID, email: String!): User
+  user(id: ID, email: String): User
 }
 
 type Mutation {

@@ -78,7 +78,12 @@ input BookingCreateInput {
   department: String!
   name: String!
   bookingParticipants: BookingParicipantCreateManyWithoutBookingIdInput
-  createUser: UserCreateOneInput!
+  createUser: UserCreateOneWithoutBookingsInput!
+}
+
+input BookingCreateManyWithoutCreateUserInput {
+  create: [BookingCreateWithoutCreateUserInput!]
+  connect: [BookingWhereUniqueInput!]
 }
 
 input BookingCreateManyWithoutRoomIdInput {
@@ -102,7 +107,21 @@ input BookingCreateWithoutBookingParticipantsInput {
   title: String!
   department: String!
   name: String!
-  createUser: UserCreateOneInput!
+  createUser: UserCreateOneWithoutBookingsInput!
+}
+
+input BookingCreateWithoutCreateUserInput {
+  id: ID
+  groupId: GroupCreateOneInput
+  categoryId: CategoryCreateOneInput
+  roomId: RoomCreateOneWithoutBookingsInput
+  date: String!
+  startTime: String!
+  endTime: String!
+  title: String!
+  department: String!
+  name: String!
+  bookingParticipants: BookingParicipantCreateManyWithoutBookingIdInput
 }
 
 input BookingCreateWithoutRoomIdInput {
@@ -116,7 +135,7 @@ input BookingCreateWithoutRoomIdInput {
   department: String!
   name: String!
   bookingParticipants: BookingParicipantCreateManyWithoutBookingIdInput
-  createUser: UserCreateOneInput!
+  createUser: UserCreateOneWithoutBookingsInput!
 }
 
 type BookingEdge {
@@ -533,7 +552,7 @@ input BookingUpdateInput {
   department: String
   name: String
   bookingParticipants: BookingParicipantUpdateManyWithoutBookingIdInput
-  createUser: UserUpdateOneRequiredInput
+  createUser: UserUpdateOneRequiredWithoutBookingsInput
 }
 
 input BookingUpdateManyDataInput {
@@ -552,6 +571,18 @@ input BookingUpdateManyMutationInput {
   title: String
   department: String
   name: String
+}
+
+input BookingUpdateManyWithoutCreateUserInput {
+  create: [BookingCreateWithoutCreateUserInput!]
+  delete: [BookingWhereUniqueInput!]
+  connect: [BookingWhereUniqueInput!]
+  set: [BookingWhereUniqueInput!]
+  disconnect: [BookingWhereUniqueInput!]
+  update: [BookingUpdateWithWhereUniqueWithoutCreateUserInput!]
+  upsert: [BookingUpsertWithWhereUniqueWithoutCreateUserInput!]
+  deleteMany: [BookingScalarWhereInput!]
+  updateMany: [BookingUpdateManyWithWhereNestedInput!]
 }
 
 input BookingUpdateManyWithoutRoomIdInput {
@@ -590,7 +621,20 @@ input BookingUpdateWithoutBookingParticipantsDataInput {
   title: String
   department: String
   name: String
-  createUser: UserUpdateOneRequiredInput
+  createUser: UserUpdateOneRequiredWithoutBookingsInput
+}
+
+input BookingUpdateWithoutCreateUserDataInput {
+  groupId: GroupUpdateOneInput
+  categoryId: CategoryUpdateOneInput
+  roomId: RoomUpdateOneWithoutBookingsInput
+  date: String
+  startTime: String
+  endTime: String
+  title: String
+  department: String
+  name: String
+  bookingParticipants: BookingParicipantUpdateManyWithoutBookingIdInput
 }
 
 input BookingUpdateWithoutRoomIdDataInput {
@@ -603,7 +647,12 @@ input BookingUpdateWithoutRoomIdDataInput {
   department: String
   name: String
   bookingParticipants: BookingParicipantUpdateManyWithoutBookingIdInput
-  createUser: UserUpdateOneRequiredInput
+  createUser: UserUpdateOneRequiredWithoutBookingsInput
+}
+
+input BookingUpdateWithWhereUniqueWithoutCreateUserInput {
+  where: BookingWhereUniqueInput!
+  data: BookingUpdateWithoutCreateUserDataInput!
 }
 
 input BookingUpdateWithWhereUniqueWithoutRoomIdInput {
@@ -614,6 +663,12 @@ input BookingUpdateWithWhereUniqueWithoutRoomIdInput {
 input BookingUpsertWithoutBookingParticipantsInput {
   update: BookingUpdateWithoutBookingParticipantsDataInput!
   create: BookingCreateWithoutBookingParticipantsInput!
+}
+
+input BookingUpsertWithWhereUniqueWithoutCreateUserInput {
+  where: BookingWhereUniqueInput!
+  update: BookingUpdateWithoutCreateUserDataInput!
+  create: BookingCreateWithoutCreateUserInput!
 }
 
 input BookingUpsertWithWhereUniqueWithoutRoomIdInput {
@@ -2582,6 +2637,7 @@ type User {
   password: String!
   groups(where: GroupParticipantWhereInput, orderBy: GroupParticipantOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GroupParticipant!]
   createGroups(where: GroupWhereInput, orderBy: GroupOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Group!]
+  bookings(where: BookingWhereInput, orderBy: BookingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Booking!]
 }
 
 type UserConnection {
@@ -2597,10 +2653,16 @@ input UserCreateInput {
   password: String!
   groups: GroupParticipantCreateManyWithoutUserIdInput
   createGroups: GroupCreateManyWithoutCreateUserInput
+  bookings: BookingCreateManyWithoutCreateUserInput
 }
 
 input UserCreateOneInput {
   create: UserCreateInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutBookingsInput {
+  create: UserCreateWithoutBookingsInput
   connect: UserWhereUniqueInput
 }
 
@@ -2614,12 +2676,22 @@ input UserCreateOneWithoutGroupsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateWithoutBookingsInput {
+  id: ID
+  email: String!
+  name: String!
+  password: String!
+  groups: GroupParticipantCreateManyWithoutUserIdInput
+  createGroups: GroupCreateManyWithoutCreateUserInput
+}
+
 input UserCreateWithoutCreateGroupsInput {
   id: ID
   email: String!
   name: String!
   password: String!
   groups: GroupParticipantCreateManyWithoutUserIdInput
+  bookings: BookingCreateManyWithoutCreateUserInput
 }
 
 input UserCreateWithoutGroupsInput {
@@ -2628,6 +2700,7 @@ input UserCreateWithoutGroupsInput {
   name: String!
   password: String!
   createGroups: GroupCreateManyWithoutCreateUserInput
+  bookings: BookingCreateManyWithoutCreateUserInput
 }
 
 type UserEdge {
@@ -2677,6 +2750,7 @@ input UserUpdateDataInput {
   password: String
   groups: GroupParticipantUpdateManyWithoutUserIdInput
   createGroups: GroupUpdateManyWithoutCreateUserInput
+  bookings: BookingUpdateManyWithoutCreateUserInput
 }
 
 input UserUpdateInput {
@@ -2685,6 +2759,7 @@ input UserUpdateInput {
   password: String
   groups: GroupParticipantUpdateManyWithoutUserIdInput
   createGroups: GroupUpdateManyWithoutCreateUserInput
+  bookings: BookingUpdateManyWithoutCreateUserInput
 }
 
 input UserUpdateManyMutationInput {
@@ -2709,6 +2784,13 @@ input UserUpdateOneRequiredInput {
   connect: UserWhereUniqueInput
 }
 
+input UserUpdateOneRequiredWithoutBookingsInput {
+  create: UserCreateWithoutBookingsInput
+  update: UserUpdateWithoutBookingsDataInput
+  upsert: UserUpsertWithoutBookingsInput
+  connect: UserWhereUniqueInput
+}
+
 input UserUpdateOneRequiredWithoutCreateGroupsInput {
   create: UserCreateWithoutCreateGroupsInput
   update: UserUpdateWithoutCreateGroupsDataInput
@@ -2725,11 +2807,20 @@ input UserUpdateOneWithoutGroupsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserUpdateWithoutBookingsDataInput {
+  email: String
+  name: String
+  password: String
+  groups: GroupParticipantUpdateManyWithoutUserIdInput
+  createGroups: GroupUpdateManyWithoutCreateUserInput
+}
+
 input UserUpdateWithoutCreateGroupsDataInput {
   email: String
   name: String
   password: String
   groups: GroupParticipantUpdateManyWithoutUserIdInput
+  bookings: BookingUpdateManyWithoutCreateUserInput
 }
 
 input UserUpdateWithoutGroupsDataInput {
@@ -2737,11 +2828,17 @@ input UserUpdateWithoutGroupsDataInput {
   name: String
   password: String
   createGroups: GroupUpdateManyWithoutCreateUserInput
+  bookings: BookingUpdateManyWithoutCreateUserInput
 }
 
 input UserUpsertNestedInput {
   update: UserUpdateDataInput!
   create: UserCreateInput!
+}
+
+input UserUpsertWithoutBookingsInput {
+  update: UserUpdateWithoutBookingsDataInput!
+  create: UserCreateWithoutBookingsInput!
 }
 
 input UserUpsertWithoutCreateGroupsInput {
@@ -2817,6 +2914,9 @@ input UserWhereInput {
   createGroups_every: GroupWhereInput
   createGroups_some: GroupWhereInput
   createGroups_none: GroupWhereInput
+  bookings_every: BookingWhereInput
+  bookings_some: BookingWhereInput
+  bookings_none: BookingWhereInput
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]

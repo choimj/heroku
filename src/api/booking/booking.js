@@ -46,7 +46,7 @@ const resolvers = {
           }
         : {};
 
-      console.log(where);
+      // console.log(where);
       const bookings = await prisma.bookings({
         where
       });
