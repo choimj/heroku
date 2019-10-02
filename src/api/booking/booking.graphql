@@ -96,8 +96,4 @@ type Mutation {
   ): BookingParticipant!
   updateBooking(data: BookingUpdateInput!): Booking
   deleteBooking(id: ID!): Booking
-  duplicatedCheckCreateBooking(
-    filter: BookingFilterInput
-    data: BookingCreateInput!
-  ): ReturnBooking
 }

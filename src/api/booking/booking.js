@@ -21,20 +21,32 @@ const resolvers = {
               {
                 AND: [
                   fStartTime ? { startTime_gte: fStartTime.time } : {},
-                  fEndTime ? { startTime_lte: fEndTime.time } : {}
-                ],
+                  fEndTime ? { startTime_lt: fEndTime.time } : {}
+                ]
+              },
+              {
                 AND: [
                   fStartTime ? { endTime_gte: fStartTime.time } : {},
-                  fEndTime ? { endTime_lte: fEndTime.time } : {}
-                ],
+                  fEndTime ? { endTime_lt: fEndTime.time } : {}
+                ]
+              },
+              {
                 AND: [
-                  fStartTime ? { StartTime_gte: fStartTime.time } : {},
-                  fEndTime ? { endTime_gte: fEndTime.time } : {}
+                  fStartTime ? { startTime_lte: fStartTime.time } : {},
+                  fEndTime ? { endTime_gt: fEndTime.time } : {}
+                ]
+              },
+              {
+                AND: [
+                  fStartTime ? { startTime_gte: fStartTime.time } : {},
+                  fEndTime ? { endTime_lt: fEndTime.time } : {}
                 ]
               }
             ]
           }
         : {};
+
+      console.log(where);
       const bookings = await prisma.bookings({
         where
       });
@@ -48,7 +60,6 @@ const resolvers = {
   },
   Mutation: {
     createBooking: async (_, args) => {
-      console.log(args.filter);
       const {
         groupId,
         categoryId,
@@ -73,12 +84,26 @@ const resolvers = {
             OR: [
               {
                 AND: [
-                  fStartTime.gt ? { endTime_gt: fStartTime.gt } : {},
-                  fStartTime.lte ? { startTime_lte: fStartTime.lte } : {}
-                ],
+                  fStartTime ? { startTime_gte: fStartTime.time } : {},
+                  fEndTime ? { startTime_lt: fEndTime.time } : {}
+                ]
+              },
+              {
                 AND: [
-                  fEndTime.gt ? { endTime_gt: fEndTime.gt } : {},
-                  fEndTime.lte ? { startTime_lte: fEndTime.lte } : {}
+                  fStartTime ? { endTime_gte: fStartTime.time } : {},
+                  fEndTime ? { endTime_lt: fEndTime.time } : {}
+                ]
+              },
+              {
+                AND: [
+                  fStartTime ? { startTime_lte: fStartTime.time } : {},
+                  fEndTime ? { endTime_gt: fEndTime.time } : {}
+                ]
+              },
+              {
+                AND: [
+                  fStartTime ? { startTime_gte: fStartTime.time } : {},
+                  fEndTime ? { endTime_lt: fEndTime.time } : {}
                 ]
               }
             ]
@@ -87,9 +112,7 @@ const resolvers = {
       const bookings = await prisma.bookings({
         where
       });
-      console.log(where);
       console.log(bookings);
-
       if (bookings.length > 0) {
         throw Error("입력하신 시간대에 이미 예약이 존재합니다.");
       }
@@ -183,39 +206,7 @@ const resolvers = {
       });
     },
     deleteBooking: async (_, args) =>
-      await prisma.deleteBooking({ id: args.id }),
-    duplicatedCheckCreateBooking: async (_, args) => {
-      console.log(args);
-      const booking = await prisma.createBooking({
-        groupId: {
-          connect: {
-            id: groupId
-          }
-        },
-        categoryId: {
-          connect: {
-            id: categoryId
-          }
-        },
-        roomId: {
-          connect: {
-            id: roomId
-          }
-        },
-        date: date,
-        startTime: startTime,
-        endTime: endTime,
-        title: title,
-        department: department,
-        name: name,
-        createUser: {
-          connect: {
-            id: userId
-          }
-        }
-      });
-      return { booking: booking, flag: true };
-    }
+      await prisma.deleteBooking({ id: args.id })
   },
   Booking: {
     async groupId(parent) {
