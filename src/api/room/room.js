@@ -68,6 +68,15 @@ const resolvers = {
     },
     async bookings(parent) {
       return await prisma.room({ id: parent.id }).bookings();
+    },
+    async bookingCount(parent) {
+      const name = await prisma.room({ id: parent.id }).name();
+      const count = await prisma
+        .bookingsConnection({ where: { roomId: { id: parent.id } } })
+        .aggregate()
+        .count();
+
+      return { count: count };
     }
   }
 };

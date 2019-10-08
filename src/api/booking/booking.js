@@ -7,6 +7,19 @@ const resolvers = {
       const { id } = args;
       return await prisma.booking({ id: id });
     },
+    todayBookings: async (_, args) => {
+      const { fDate } = args.filter;
+      let where = args.filter
+        ? {
+            AND: [fDate ? { date_contains: fDate.contains } : {}]
+          }
+        : {};
+
+      const bookings = await prisma.bookings({
+        where
+      });
+      return bookings;
+    },
     filterTest: async (_, args) => {
       console.log(args);
       const { fRoomId, fDate, fStartTime, fEndTime } = args.filter;

@@ -9,6 +9,11 @@ type Room {
   categoryId: Category
   createUser: User
   bookings: [Booking!]
+  bookingCount: GroupBy
+}
+
+type GroupBy {
+  count: Int!
 }
 
 input RoomCreateInput {

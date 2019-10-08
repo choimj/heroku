@@ -78,6 +78,7 @@ input BookingStringFilterInput {
 type Query {
   bookings: [Booking]!
   booking(id: ID): Booking
+  todayBookings(filter: BookingFilterInput): [Booking]
   filterTest(filter: BookingFilterInput): [Booking]
 }
 
