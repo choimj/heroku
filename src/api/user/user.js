@@ -40,7 +40,6 @@ const resolvers = {
           .digest("base64");
         if (cryptoPassword === compPassword) {
           user.flag = true;
-          // console.log(user);
           return user;
         } else {
           user.flag = false;
